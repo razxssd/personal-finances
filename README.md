@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Finances
 
-## Getting Started
+App personale (mobile-first) per tracciare patrimonio (investimenti + liquidità) e cashflow (entrate/uscite). Sostituisce un workflow Notion.
 
-First, run the development server:
+**Stack:** Next.js 16 · React 19 · TypeScript · Tailwind v4 · shadcn/ui · Drizzle ORM · Neon Postgres · Clerk · Recharts · Vaul
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Setup locale
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Provisiona le risorse su [Vercel](https://vercel.com):
+   - **Neon Postgres** dal Marketplace (free tier 0.5 GB)
+   - **Clerk** dal Marketplace (free fino a 10K MAU)
+2. Linka il progetto:
+   ```bash
+   vercel link
+   vercel env pull .env.local
+   ```
+3. Configura `ALLOWED_EMAIL=capanueduard98@gmail.com` su Vercel.
+4. Installa e fai il push dello schema:
+   ```bash
+   npm install
+   npx drizzle-kit push
+   ```
+5. Avvia dev:
+   ```bash
+   npm run dev
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Comandi
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Comando | Cosa fa |
+|---|---|
+| `npm run dev` | Dev server su :3000 |
+| `npm run build` | Build prod |
+| `npm run start` | Avvia il build |
+| `npx drizzle-kit push` | Sincronizza schema con Neon |
+| `npx drizzle-kit studio` | UI per il DB |
 
-## Learn More
+## Struttura
 
-To learn more about Next.js, take a look at the following resources:
+- `app/` — Routes (`/`, `/patrimonio`, `/cashflow`, `/import`, `/settings`).
+- `components/` — UI (charts, forms, layout, shadcn primitives).
+- `lib/db/` — Schema Drizzle, queries.
+- `lib/import/` — Parser CSV (incluso Notion).
+- `lib/fx.ts` — Conversione multi-valuta (exchangerate.host + CoinGecko).
+- `lib/actions.ts` — Server Actions per CRUD.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Vedi [`CLAUDE.md`](./CLAUDE.md) e [`memory.md`](./memory.md) per contesto, decisioni e edge case.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Import dati storici
 
-## Deploy on Vercel
+Tre modi:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Notion export diretto** — alla pagina `/import` carica direttamente il CSV `Expenses…_all.csv` esportato da Notion. Il parser strippa `$`, gestisce date mancanti, e mappa le categorie.
+2. **CSV generici** — scarica i template da `/import` (investments, liquidity, income, expenses) e compilali manualmente.
+3. **UI a riga** — usa i form via bottom sheet dal mobile.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Mobile UX
+
+- Bottom navigation fissa con safe-area-inset.
+- Forms in bottom sheet (vaul) con gestione tastiera iOS via `visualViewport`.
+- Tap target ≥ 44pt, font input ≥ 16px (evita zoom iOS).
+- Grafici sempre responsive, max 7-8 punti su mobile.
+- PWA installabile (manifest + theme-color).
+
+## Privacy
+
+Repo pubblico, dati privati. Solo `ALLOWED_EMAIL` (Clerk allowlist) può accedere. Nessun `.env.local` committato — usa `vercel env pull`.
