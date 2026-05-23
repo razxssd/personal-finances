@@ -22,7 +22,7 @@ App personale di Eduard per tracciare patrimonio (investimenti + liquidità) e c
 - **Currency display:** EUR di default, `Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' })`.
 - **Date display:** `format(date, 'MMM yyyy', { locale: it })` o equivalente.
 - **Mobile-first:** progetta per iPhone 12 Pro Max (428×926). Tap target ≥ 44pt, input font ≥ 16px (evita zoom iOS).
-- **Niente modal centrati** per i form di entry — solo `Drawer` (vaul) dal bottom.
+- **Form di entry responsive:** `Drawer` (vaul) dal bottom su mobile (< 768px); `Dialog` centrato `sm:max-w-md` su desktop. Il wrapper `BottomSheet` decide in base a `useIsDesktop`.
 - **Numeric input:** `inputMode="decimal"` + `pattern="[0-9]*[.,]?[0-9]*"` per il keypad iOS.
 
 ## Struttura directory
@@ -87,7 +87,7 @@ L'utente può creare tag custom on-the-fly da qualsiasi combobox di tag.
 
 ## Mobile UX (vincoli forti)
 
-1. Form sempre in `Drawer` (vaul) con snap point e drag handle.
+1. Form via `BottomSheet` wrapper — Drawer su mobile, Dialog centrato su desktop (breakpoint 768px).
 2. `useVisualViewport` hook per spostare il form quando si apre la tastiera iOS.
 3. Bottom nav con `padding-bottom: env(safe-area-inset-bottom)`.
 4. Grafici: max 7-8 data points visibili, paginazione per anno/quarter.
@@ -106,7 +106,7 @@ npx drizzle-kit studio      # GUI per il DB
 
 ## Da non fare
 
-- ❌ Non usare `Dialog` centrato per i form di inserimento.
+- ❌ Non usare `Dialog` centrato per i form di inserimento su mobile (usa `BottomSheet` wrapper che fa lo switch automatico).
 - ❌ Non hardcodare valori in EUR — sempre `currency` esplicita nel record.
 - ❌ Non "normalizzare" i tag durante l'import Notion — preserva le inconsistenze, espone tool di merge a parte.
 - ❌ Non mettere secrets in `NEXT_PUBLIC_*` env vars.

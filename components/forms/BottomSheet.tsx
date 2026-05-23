@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactElement, ReactNode, cloneElement } from "react";
 import {
   Drawer,
   DrawerContent,
@@ -10,9 +10,33 @@ import {
   DrawerTrigger,
   DrawerFooter,
 } from "@/components/ui/drawer";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useKeyboardOffset } from "@/lib/hooks/useVisualViewport";
+import { useIsDesktop } from "@/lib/hooks/useMediaQuery";
 
-export function BottomSheet({
+type Props = {
+  trigger?: ReactElement<{ onClick?: (e: React.MouseEvent) => void }>;
+  open?: boolean;
+  onOpenChange?: (v: boolean) => void;
+  title: string;
+  description?: string;
+  children: ReactNode;
+  footer?: ReactNode;
+};
+
+export function BottomSheet(props: Props) {
+  const isDesktop = useIsDesktop();
+  return isDesktop ? <DesktopDialog {...props} /> : <MobileDrawer {...props} />;
+}
+
+function DesktopDialog({
   trigger,
   open,
   onOpenChange,
@@ -20,15 +44,39 @@ export function BottomSheet({
   description,
   children,
   footer,
-}: {
-  trigger?: ReactNode;
-  open?: boolean;
-  onOpenChange?: (v: boolean) => void;
-  title: string;
-  description?: string;
-  children: ReactNode;
-  footer?: ReactNode;
-}) {
+}: Props) {
+  const triggerWithOnClick = trigger
+    ? cloneElement(trigger, {
+        onClick: (e: React.MouseEvent) => {
+          trigger.props.onClick?.(e);
+          onOpenChange?.(true);
+        },
+      })
+    : null;
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {triggerWithOnClick}
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          {description ? <DialogDescription>{description}</DialogDescription> : null}
+        </DialogHeader>
+        <div className="space-y-4">{children}</div>
+        {footer ? <DialogFooter>{footer}</DialogFooter> : null}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function MobileDrawer({
+  trigger,
+  open,
+  onOpenChange,
+  title,
+  description,
+  children,
+  footer,
+}: Props) {
   const offset = useKeyboardOffset();
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>

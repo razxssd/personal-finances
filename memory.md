@@ -46,7 +46,7 @@ Il `Month` ha sempre suffisso ` (https://www.notion.so/...)`. Il parser lo strip
 ## Vincoli UX (non negoziabili)
 
 - iPhone 12 Pro Max è il device di riferimento.
-- Form via `Drawer` (vaul) — mai `Dialog` centrato.
+- Form via `BottomSheet` wrapper responsive — `Drawer` (vaul) su mobile (< 768px), `Dialog` centrato `sm:max-w-md` su desktop. Reason: un drawer full-height su monitor 27" è eccessivo; mobile resta con bottom sheet.
 - `useVisualViewport` per gestire la tastiera iOS senza scroll glitch.
 - `inputMode="decimal"` su tutti gli input numerici.
 - Bottom navigation fissa con safe-area-inset-bottom.
