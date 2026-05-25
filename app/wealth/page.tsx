@@ -1,5 +1,5 @@
 import { AppShell } from "@/components/layout/AppShell";
-import { PatrimonioClient } from "./PatrimonioClient";
+import { WealthClient } from "./WealthClient";
 import {
   listInvestments,
   listLiquidity,
@@ -12,7 +12,7 @@ import {
 
 export const dynamic = "force-dynamic";
 
-export default async function PatrimonioPage() {
+export default async function WealthPage() {
   const [investments, liquidity, invTags, liqTags] = await Promise.all([
     listInvestments(),
     listLiquidity(),
@@ -27,8 +27,8 @@ export default async function PatrimonioPage() {
   ]);
 
   return (
-    <AppShell title="Patrimonio">
-      <PatrimonioClient
+    <AppShell title="Wealth">
+      <WealthClient
         investments={investments.map((i) => ({
           id: i.id,
           monthYear: i.monthYear,

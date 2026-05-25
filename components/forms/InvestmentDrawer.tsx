@@ -9,7 +9,7 @@ import { createInvestment, createLiquidity } from "@/lib/actions";
 
 type Kind = "investment" | "liquidity";
 
-export function PatrimonioDrawer({
+export function WealthDrawer({
   kind,
   customTags,
   triggerLabel,
@@ -28,11 +28,11 @@ export function PatrimonioDrawer({
       trigger={
         <Button size="sm" className="gap-1">
           <Plus className="size-4" />
-          {triggerLabel ?? "Aggiungi"}
+          {triggerLabel ?? "Add"}
         </Button>
       }
-      title={kind === "investment" ? "Snapshot investimento" : "Snapshot liquidità"}
-      description="Inserisci il valore di questo asset per il mese selezionato."
+      title={kind === "investment" ? "Investment snapshot" : "Liquidity snapshot"}
+      description="Enter the value of this asset for the selected month."
     >
       <SnapshotForm
         mode={kind}

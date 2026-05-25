@@ -36,7 +36,7 @@ export function EntryList({
   if (entries.length === 0) {
     return (
       <div className="rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">
-        {empty ?? "Nessuna voce ancora."}
+        {empty ?? "No entries yet."}
       </div>
     );
   }
@@ -83,7 +83,7 @@ export function EntryList({
                         className="h-7 px-2 text-muted-foreground hover:text-foreground"
                         disabled={pending}
                         onClick={() => onEdit(e.id)}
-                        aria-label="Modifica"
+                        aria-label="Edit"
                       >
                         <Pencil className="size-3.5" />
                       </Button>
@@ -95,17 +95,17 @@ export function EntryList({
                       className="h-7 px-2 text-muted-foreground hover:text-destructive"
                       disabled={pending}
                       onClick={() => {
-                        if (!confirm("Eliminare questa voce?")) return;
+                        if (!confirm("Delete this entry?")) return;
                         startTransition(async () => {
                           try {
                             await onDelete(e.id);
-                            toast.success("Eliminato");
+                            toast.success("Deleted");
                           } catch (err) {
                             toast.error((err as Error).message);
                           }
                         });
                       }}
-                      aria-label="Elimina"
+                      aria-label="Delete"
                     >
                       <Trash2 className="size-3.5" />
                     </Button>

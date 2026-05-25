@@ -42,7 +42,7 @@ export async function importInvestmentsCsv(csvText: string): Promise<ImportResul
     );
     await bulkEnsureTags(userId, rows.map((r) => r.tag), "investment");
   }
-  revalidatePath("/patrimonio");
+  revalidatePath("/wealth");
   revalidatePath("/");
   return { inserted: rows.length, errors };
 }
@@ -63,7 +63,7 @@ export async function importLiquidityCsv(csvText: string): Promise<ImportResult>
     );
     await bulkEnsureTags(userId, rows.map((r) => r.tag), "liquidity");
   }
-  revalidatePath("/patrimonio");
+  revalidatePath("/wealth");
   revalidatePath("/");
   return { inserted: rows.length, errors };
 }

@@ -19,9 +19,9 @@ App personale di Eduard per tracciare patrimonio (investimenti + liquidità) e c
 ## Convenzioni
 
 - **Tema:** `next-themes` con `defaultTheme="dark"`, `enableSystem`, toggle ciclico (dark → light → system → dark) nell'header dell'`AppShell`. Clerk sign-in resta forzato dark via `appearance.variables.colorScheme`.
-- **Lingua UI:** italiano. **Codice/identifiers/comments:** inglese.
-- **Currency display:** EUR di default, `Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' })`.
-- **Date display:** `format(date, 'MMM yyyy', { locale: it })` o equivalente.
+- **Lingua UI:** inglese. **Codice/identifiers/comments:** inglese.
+- **Currency display:** EUR di default, `Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' })`.
+- **Date display:** `format(date, 'MMM yyyy')` (default English locale).
 - **Mobile-first:** progetta per iPhone 12 Pro Max (428×926). Tap target ≥ 44pt, input font ≥ 16px (evita zoom iOS).
 - **Form di entry responsive:** `Drawer` (vaul) dal bottom su mobile (< 768px); `Dialog` centrato `sm:max-w-md` su desktop. Il wrapper `BottomSheet` decide in base a `useIsDesktop`.
 - **Numeric input:** `inputMode="decimal"` + `pattern="[0-9]*[.,]?[0-9]*"` per il keypad iOS.
@@ -32,7 +32,7 @@ App personale di Eduard per tracciare patrimonio (investimenti + liquidità) e c
 app/
   layout.tsx                  # Root layout (Clerk provider, theme, toaster)
   page.tsx                    # Home dashboard
-  patrimonio/page.tsx         # Snapshots investimenti + liquidità
+  wealth/page.tsx             # Investments + liquidity snapshots
   cashflow/page.tsx           # Income + expenses
   import/page.tsx             # Import/export + CSV templates
   settings/page.tsx           # Tag management, allowlist

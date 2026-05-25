@@ -42,8 +42,8 @@ export function EditInvestmentDrawer({
     <BottomSheet
       open
       onOpenChange={(v) => !v && onClose()}
-      title="Modifica investimento"
-      description="Aggiorna importo, tag o nota."
+      title="Edit investment"
+      description="Update amount, tag or note."
     >
       <SnapshotForm
         mode="investment"
@@ -78,8 +78,8 @@ export function EditLiquidityDrawer({
     <BottomSheet
       open
       onOpenChange={(v) => !v && onClose()}
-      title="Modifica liquidità"
-      description="Aggiorna importo, tag o nota."
+      title="Edit liquidity"
+      description="Update amount, tag or note."
     >
       <SnapshotForm
         mode="liquidity"
@@ -114,7 +114,7 @@ export function EditIncomeDrawer({
     <BottomSheet
       open
       onOpenChange={(v) => !v && onClose()}
-      title="Modifica entrata"
+      title="Edit income"
     >
       <TransactionForm
         mode="income"
@@ -150,7 +150,7 @@ export function EditExpenseDrawer({
     <BottomSheet
       open
       onOpenChange={(v) => !v && onClose()}
-      title="Modifica uscita"
+      title="Edit expense"
     >
       <TransactionForm
         mode="expense"

@@ -60,12 +60,13 @@ Il `Month` ha sempre suffisso ` (https://www.notion.so/...)`. Il parser lo strip
 - Charts: `ResponsiveContainer` sempre, max 7-8 data points visibili su mobile.
 - Niente scroll orizzontale.
 
-## Lingua
+## Language
 
-- UI copy: **italiano**.
-- Codice, identifier, type, commenti: **inglese**.
-- Tag (es. "Fixed costs", "Eating Out"): preservati come da Notion in mix EN/IT — sono dati, non UI.
-- Date e numeri: locale `it-IT`.
+- UI copy: **English** (switched from Italian on 2026-05-25).
+- Codice, identifier, type, commenti: **English** (unchanged).
+- Tag (es. "Fixed costs", "Eating Out", "Affitto", "Iliad"): preservati as-is in mix EN/IT — sono dati storici dal Notion, non UI.
+- Date e numeri: locale `en-US`, currency EUR.
+- Route names: english (`/wealth`, `/cashflow`, `/import`, `/settings`).
 
 ## Tag preset
 

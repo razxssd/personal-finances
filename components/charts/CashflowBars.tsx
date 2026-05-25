@@ -23,7 +23,7 @@ export function CashflowBars({ data }: { data: CashflowPoint[] }) {
   if (data.length === 0) {
     return (
       <div className="flex h-56 items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground">
-        Nessun dato — aggiungi entrate o uscite
+        No data — add income or expenses
       </div>
     );
   }
@@ -50,8 +50,8 @@ export function CashflowBars({ data }: { data: CashflowPoint[] }) {
             }}
           />
           <Legend wrapperStyle={{ fontSize: 12 }} />
-          <Bar dataKey="income" name="Entrate" fill="#22c55e" radius={[4, 4, 0, 0]} />
-          <Bar dataKey="expense" name="Uscite" fill="#ef4444" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="income" name="Income" fill="#22c55e" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="expense" name="Expenses" fill="#ef4444" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

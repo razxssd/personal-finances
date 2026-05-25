@@ -17,12 +17,12 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Personal Finances",
-  description: "Patrimonio, entrate, uscite — tutto in un posto.",
+  description: "Wealth, income and expenses — all in one place.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Finanze",
+    title: "Finances",
   },
 };
 
@@ -47,7 +47,7 @@ export default function RootLayout({
       }}
     >
       <html
-        lang="it"
+        lang="en"
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
         suppressHydrationWarning
       >

@@ -1,20 +1,19 @@
 import { format } from "date-fns";
-import { it } from "date-fns/locale";
 
-const eurFormatter = new Intl.NumberFormat("it-IT", {
+const eurFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "EUR",
   maximumFractionDigits: 2,
 });
 
-const compactEurFormatter = new Intl.NumberFormat("it-IT", {
+const compactEurFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "EUR",
   maximumFractionDigits: 1,
   notation: "compact",
 });
 
-const percentFormatter = new Intl.NumberFormat("it-IT", {
+const percentFormatter = new Intl.NumberFormat("en-US", {
   style: "percent",
   maximumFractionDigits: 1,
   signDisplay: "exceptZero",
@@ -43,20 +42,20 @@ export function formatMonthLabel(monthYear: string): string {
   const [year, month] = monthYear.split("-").map(Number);
   if (!year || !month) return monthYear;
   const d = new Date(year, month - 1, 1);
-  return format(d, "LLL yyyy", { locale: it });
+  return format(d, "LLL yyyy");
 }
 
 export function formatMonthLong(monthYear: string): string {
   const [year, month] = monthYear.split("-").map(Number);
   if (!year || !month) return monthYear;
   const d = new Date(year, month - 1, 1);
-  return format(d, "LLLL yyyy", { locale: it });
+  return format(d, "LLLL yyyy");
 }
 
 export function formatDateIT(isoDate: string): string {
   const d = new Date(isoDate);
   if (Number.isNaN(d.getTime())) return isoDate;
-  return format(d, "dd MMM yyyy", { locale: it });
+  return format(d, "dd MMM yyyy");
 }
 
 export function currentMonthYear(): string {

@@ -15,10 +15,10 @@ import type { TagKind } from "@/lib/db/schema";
 type CustomTag = { id: string; name: string; kind: TagKind };
 
 const KIND_LABEL: Record<TagKind, string> = {
-  investment: "Investimenti",
-  liquidity: "Liquidità",
-  income: "Entrate",
-  expense: "Uscite",
+  investment: "Investments",
+  liquidity: "Liquidity",
+  income: "Income",
+  expense: "Expenses",
 };
 
 export function SettingsClient({ tags }: { tags: CustomTag[] }) {
@@ -29,7 +29,7 @@ export function SettingsClient({ tags }: { tags: CustomTag[] }) {
     <div className="space-y-6">
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">Tag</CardTitle>
+          <CardTitle className="text-base">Tags</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {kinds.map((kind, idx) => {
@@ -62,11 +62,11 @@ export function SettingsClient({ tags }: { tags: CustomTag[] }) {
                         className="ml-1 -mr-0.5 size-4 rounded-full hover:bg-muted inline-flex items-center justify-center"
                         disabled={pending}
                         onClick={() => {
-                          if (!confirm(`Eliminare il tag custom "${t.name}"?`)) return;
+                          if (!confirm(`Delete custom tag "${t.name}"?`)) return;
                           startTransition(async () => {
                             try {
                               await deleteTag(t.id);
-                              toast.success("Tag eliminato");
+                              toast.success("Tag deleted");
                             } catch (e) {
                               toast.error((e as Error).message);
                             }
@@ -83,7 +83,7 @@ export function SettingsClient({ tags }: { tags: CustomTag[] }) {
             );
           })}
           <p className="text-xs text-muted-foreground">
-            I tag preset non si possono eliminare. I tag custom vengono creati on-the-fly quando li scegli in un form.
+            Preset tags can't be deleted. Custom tags are created on-the-fly when you select them in a form.
           </p>
         </CardContent>
       </Card>
@@ -95,7 +95,7 @@ export function SettingsClient({ tags }: { tags: CustomTag[] }) {
         <CardContent>
           <SignOutButton>
             <Button variant="outline" size="sm">
-              Esci
+              Sign out
             </Button>
           </SignOutButton>
         </CardContent>

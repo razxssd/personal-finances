@@ -1,7 +1,7 @@
 {
   "name": "Personal Finances",
-  "short_name": "Finanze",
-  "description": "Patrimonio, entrate, uscite",
+  "short_name": "Finances",
+  "description": "Wealth, income and expenses",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0a",

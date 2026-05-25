@@ -93,13 +93,13 @@ export function CashflowClient({
   );
 
   const breakdownLabel =
-    selectedMonth === "all" ? "tutti i mesi" : selectedMonth;
+    selectedMonth === "all" ? "all months" : selectedMonth;
 
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-sm">Entrate vs Uscite</CardTitle>
+          <CardTitle className="text-sm">Income vs Expenses</CardTitle>
           <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer select-none">
             <input
               type="checkbox"
@@ -107,7 +107,7 @@ export function CashflowClient({
               checked={excludeInvestments}
               onChange={(e) => setExcludeInvestments(e.target.checked)}
             />
-            Escludi “Investments”
+            Exclude “Investments”
           </label>
         </CardHeader>
         <CardContent>
@@ -118,7 +118,7 @@ export function CashflowClient({
       <div className="flex items-center justify-between gap-2">
         <div className="space-y-1">
           <Label htmlFor="month-filter" className="text-xs">
-            Filtra per mese
+            Filter by month
           </Label>
           <select
             id="month-filter"
@@ -127,7 +127,7 @@ export function CashflowClient({
             className="h-9 rounded-md border border-input bg-background px-2 text-sm"
             style={{ fontSize: "16px" }}
           >
-            <option value="all">Tutti i mesi</option>
+            <option value="all">All months</option>
             {months.map((m) => (
               <option key={m} value={m}>
                 {m}
@@ -144,10 +144,10 @@ export function CashflowClient({
       <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)}>
         <TabsList className="w-full">
           <TabsTrigger value="expense" className="flex-1">
-            Uscite ({filteredExpenses.length})
+            Expenses ({filteredExpenses.length})
           </TabsTrigger>
           <TabsTrigger value="income" className="flex-1">
-            Entrate ({filteredIncomes.length})
+            Income ({filteredIncomes.length})
           </TabsTrigger>
         </TabsList>
 
@@ -155,7 +155,7 @@ export function CashflowClient({
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm">
-                Breakdown uscite · {breakdownLabel}
+                Expenses breakdown · {breakdownLabel}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -175,7 +175,7 @@ export function CashflowClient({
             }))}
             onDelete={deleteExpense}
             onEdit={setEditingExpenseId}
-            empty="Nessuna uscita nel periodo"
+            empty="No expenses in this period"
           />
         </TabsContent>
 
@@ -183,7 +183,7 @@ export function CashflowClient({
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm">
-                Breakdown entrate · {breakdownLabel}
+                Income breakdown · {breakdownLabel}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -203,7 +203,7 @@ export function CashflowClient({
             }))}
             onDelete={deleteIncome}
             onEdit={setEditingIncomeId}
-            empty="Nessuna entrata nel periodo"
+            empty="No income in this period"
           />
         </TabsContent>
       </Tabs>

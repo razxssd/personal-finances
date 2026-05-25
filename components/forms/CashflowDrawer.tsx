@@ -19,7 +19,7 @@ export function CashflowDrawer({
   const [open, setOpen] = useState(false);
   const action = kind === "income" ? createIncome : createExpense;
   const Icon = kind === "income" ? Plus : Minus;
-  const label = kind === "income" ? "Entrata" : "Uscita";
+  const label = kind === "income" ? "Income" : "Expense";
 
   return (
     <BottomSheet
@@ -35,7 +35,7 @@ export function CashflowDrawer({
           {label}
         </Button>
       }
-      title={kind === "income" ? "Nuova entrata" : "Nuova uscita"}
+      title={kind === "income" ? "New income" : "New expense"}
     >
       <TransactionForm
         mode={kind}

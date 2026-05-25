@@ -18,7 +18,7 @@ export function TagCombobox({
   value,
   onChange,
   options,
-  placeholder = "Seleziona tag…",
+  placeholder = "Select tag…",
 }: {
   value: string;
   onChange: (next: string) => void;
@@ -60,12 +60,12 @@ export function TagCombobox({
       >
         <Command shouldFilter={false}>
           <CommandInput
-            placeholder="Cerca o crea…"
+            placeholder="Search or create…"
             value={query}
             onValueChange={setQuery}
           />
           <CommandList>
-            <CommandEmpty>Nessun tag.</CommandEmpty>
+            <CommandEmpty>No tags.</CommandEmpty>
             <CommandGroup>
               {filtered.map((opt) => (
                 <CommandItem
@@ -96,7 +96,7 @@ export function TagCombobox({
                   }}
                 >
                   <Plus className="mr-2 size-4" />
-                  Crea “{query.trim()}”
+                  Create “{query.trim()}”
                 </CommandItem>
               ) : null}
             </CommandGroup>

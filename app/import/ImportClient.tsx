@@ -3,7 +3,6 @@
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-// Note: Button is still used for non-asChild buttons in this file
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Download, Upload } from "lucide-react";
 import {
@@ -22,7 +21,7 @@ function ImportCard({
   description,
   templateUrl,
   importFn,
-  acceptLabel = "Carica CSV",
+  acceptLabel = "Upload CSV",
 }: {
   title: string;
   description: string;
@@ -44,13 +43,13 @@ function ImportCard({
           const res = await importFn(text);
           setErrors(res.errors);
           if (res.inserted > 0) {
-            toast.success(`Importate ${res.inserted} righe`);
+            toast.success(`Imported ${res.inserted} rows`);
           }
           if (res.errors.length > 0) {
-            toast.warning(`${res.errors.length} righe scartate — vedi dettagli`);
+            toast.warning(`${res.errors.length} rows skipped — see details`);
           }
           if (res.inserted === 0 && res.errors.length === 0) {
-            toast.info("Nessuna riga da importare");
+            toast.info("Nothing to import");
           }
         } catch (err) {
           toast.error((err as Error).message);
@@ -77,7 +76,7 @@ function ImportCard({
               className="inline-flex items-center justify-center gap-2 h-7 px-2.5 rounded-md border border-input bg-background text-[0.8rem] font-medium hover:bg-accent transition-colors"
             >
               <Download className="size-4" />
-              Template CSV
+              CSV template
             </a>
           ) : null}
           <label className="flex-1">
@@ -92,22 +91,22 @@ function ImportCard({
               className="inline-flex w-full items-center justify-center gap-2 h-9 px-4 rounded-md border border-input bg-background text-sm font-medium cursor-pointer hover:bg-accent transition-colors"
             >
               <Upload className="size-4" />
-              {pending ? "Importazione…" : acceptLabel}
+              {pending ? "Importing…" : acceptLabel}
             </span>
           </label>
         </div>
         {errors.length > 0 ? (
           <details className="text-xs">
             <summary className="cursor-pointer text-muted-foreground">
-              {errors.length} righe scartate
+              {errors.length} rows skipped
             </summary>
             <ul className="mt-2 space-y-1 max-h-40 overflow-y-auto rounded bg-muted/40 p-2">
               {errors.slice(0, 50).map((e, idx) => (
                 <li key={idx} className="text-muted-foreground">
-                  Riga {e.line}: {e.message}
+                  Row {e.line}: {e.message}
                 </li>
               ))}
-              {errors.length > 50 ? <li>…e altre {errors.length - 50}</li> : null}
+              {errors.length > 50 ? <li>…and {errors.length - 50} more</li> : null}
             </ul>
           </details>
         ) : null}
@@ -132,7 +131,7 @@ export function ImportClient() {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-      toast.success("Export scaricato");
+      toast.success("Export downloaded");
     } catch (err) {
       toast.error((err as Error).message);
     } finally {
@@ -145,49 +144,49 @@ export function ImportClient() {
       <Card className="border-dashed">
         <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
-            <p className="font-medium text-sm">Backup completo</p>
+            <p className="font-medium text-sm">Full backup</p>
             <p className="text-xs text-muted-foreground">
-              Scarica tutti i tuoi dati come JSON.
+              Download all your data as JSON.
             </p>
           </div>
           <Button onClick={handleExport} disabled={exporting} size="sm" className="gap-2">
             <Download className="size-4" />
-            {exporting ? "Export…" : "Esporta JSON"}
+            {exporting ? "Exporting…" : "Export JSON"}
           </Button>
         </CardContent>
       </Card>
 
       <ImportCard
         title="Notion — Expenses"
-        description="Carica direttamente l'export del database Expenses da Notion (colonne: Source, Amount, Category, Date, Month). Lo $ viene strippato, gli importi sono salvati come EUR."
+        description="Upload the Notion Expenses database export directly (columns: Source, Amount, Category, Date, Month). The $ prefix is stripped, amounts are stored as EUR."
         importFn={importNotionExpensesCsv}
-        acceptLabel="Carica Notion CSV"
+        acceptLabel="Upload Notion CSV"
       />
 
       <ImportCard
-        title="Investimenti — snapshot mensili"
-        description="CSV con colonne: month (YYYY-MM), value, currency, tag, note"
+        title="Investments — monthly snapshots"
+        description="CSV with columns: month (YYYY-MM), value, currency, tag, note"
         templateUrl="/templates/investments.csv"
         importFn={importInvestmentsCsv}
       />
 
       <ImportCard
-        title="Liquidità — snapshot mensili"
-        description="CSV con colonne: month (YYYY-MM), value, currency, tag, note"
+        title="Liquidity — monthly snapshots"
+        description="CSV with columns: month (YYYY-MM), value, currency, tag, note"
         templateUrl="/templates/liquidity.csv"
         importFn={importLiquidityCsv}
       />
 
       <ImportCard
-        title="Entrate — transazioni"
-        description="CSV con colonne: date (YYYY-MM-DD), amount, currency, tag, source, note"
+        title="Income — transactions"
+        description="CSV with columns: date (YYYY-MM-DD), amount, currency, tag, source, note"
         templateUrl="/templates/income.csv"
         importFn={importIncomesCsv}
       />
 
       <ImportCard
-        title="Uscite — transazioni"
-        description="CSV con colonne: date (YYYY-MM-DD), amount, currency, tag, source, note"
+        title="Expenses — transactions"
+        description="CSV with columns: date (YYYY-MM-DD), amount, currency, tag, source, note"
         templateUrl="/templates/expenses.csv"
         importFn={importExpensesCsv}
       />

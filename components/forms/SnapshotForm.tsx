@@ -62,11 +62,11 @@ export function SnapshotForm({
         e.preventDefault();
         const parsed = parseFloat(rawValue.replace(",", "."));
         if (!Number.isFinite(parsed) || parsed <= 0) {
-          toast.error("Inserisci un importo valido");
+          toast.error("Enter a valid amount");
           return;
         }
         if (!tag.trim()) {
-          toast.error("Seleziona un tag");
+          toast.error("Select a tag");
           return;
         }
         startTransition(async () => {
@@ -78,15 +78,15 @@ export function SnapshotForm({
               tag: tag.trim(),
               note: note.trim() || null,
             });
-            toast.success("Snapshot salvato");
+            toast.success("Snapshot saved");
           } catch (err) {
-            toast.error((err as Error).message ?? "Errore nel salvataggio");
+            toast.error((err as Error).message ?? "Save failed");
           }
         });
       }}
     >
       <div className="space-y-2">
-        <Label htmlFor="month">Mese</Label>
+        <Label htmlFor="month">Month</Label>
         <Input
           id="month"
           type="month"
@@ -98,7 +98,7 @@ export function SnapshotForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="amount">Valore</Label>
+        <Label htmlFor="amount">Value</Label>
         <div className="flex gap-2">
           <MoneyInput
             id="amount"
@@ -116,25 +116,25 @@ export function SnapshotForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="note">Note (opzionale)</Label>
+        <Label htmlFor="note">Note (optional)</Label>
         <Textarea
           id="note"
           rows={2}
           value={note}
           onChange={(e) => setNote(e.target.value)}
           style={{ fontSize: "16px" }}
-          placeholder="es. VWCE su Directa"
+          placeholder="e.g. VWCE on Directa"
         />
       </div>
 
       <div className="flex gap-2 pt-2">
         {onCancel ? (
           <Button type="button" variant="outline" className="flex-1" onClick={onCancel}>
-            Annulla
+            Cancel
           </Button>
         ) : null}
         <Button type="submit" className="flex-1" disabled={pending}>
-          {pending ? "Salvataggio…" : "Salva"}
+          {pending ? "Saving…" : "Save"}
         </Button>
       </div>
     </form>

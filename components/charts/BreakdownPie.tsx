@@ -10,7 +10,7 @@ export function BreakdownPie({ data }: { data: BreakdownEntry[] }) {
   if (data.length === 0) {
     return (
       <div className="flex h-56 items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground">
-        Nessun dato per il breakdown
+        No breakdown data
       </div>
     );
   }

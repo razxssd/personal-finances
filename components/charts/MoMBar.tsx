@@ -19,7 +19,7 @@ export function MoMBar({ data }: { data: MoMPoint[] }) {
   if (data.length === 0) {
     return (
       <div className="flex h-48 items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground">
-        Servono almeno 2 mesi di dati
+        Need at least 2 months of data
       </div>
     );
   }

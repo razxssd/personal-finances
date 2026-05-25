@@ -65,11 +65,11 @@ export function TransactionForm({
         e.preventDefault();
         const parsed = parseFloat(rawAmount.replace(",", "."));
         if (!Number.isFinite(parsed) || parsed <= 0) {
-          toast.error("Inserisci un importo valido");
+          toast.error("Enter a valid amount");
           return;
         }
         if (!tag.trim()) {
-          toast.error("Seleziona un tag");
+          toast.error("Select a tag");
           return;
         }
         startTransition(async () => {
@@ -82,15 +82,15 @@ export function TransactionForm({
               source: source.trim() || null,
               note: note.trim() || null,
             });
-            toast.success("Voce salvata");
+            toast.success("Entry saved");
           } catch (err) {
-            toast.error((err as Error).message ?? "Errore nel salvataggio");
+            toast.error((err as Error).message ?? "Save failed");
           }
         });
       }}
     >
       <div className="space-y-2">
-        <Label htmlFor="date">Data</Label>
+        <Label htmlFor="date">Date</Label>
         <Input
           id="date"
           type="date"
@@ -102,7 +102,7 @@ export function TransactionForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="amount">Importo</Label>
+        <Label htmlFor="amount">Amount</Label>
         <div className="flex gap-2">
           <MoneyInput
             id="amount"
@@ -121,19 +121,19 @@ export function TransactionForm({
 
       <div className="space-y-2">
         <Label htmlFor="source">
-          {mode === "income" ? "Source (es. Datore di lavoro)" : "Source (es. Iliad, Netflix)"}
+          {mode === "income" ? "Source (e.g. Employer)" : "Source (e.g. Iliad, Netflix)"}
         </Label>
         <Input
           id="source"
           value={source}
           onChange={(e) => setSource(e.target.value)}
           style={{ fontSize: "16px" }}
-          placeholder="opzionale"
+          placeholder="optional"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="note">Note (opzionale)</Label>
+        <Label htmlFor="note">Note (optional)</Label>
         <Textarea
           id="note"
           rows={2}
@@ -146,11 +146,11 @@ export function TransactionForm({
       <div className="flex gap-2 pt-2">
         {onCancel ? (
           <Button type="button" variant="outline" className="flex-1" onClick={onCancel}>
-            Annulla
+            Cancel
           </Button>
         ) : null}
         <Button type="submit" className="flex-1" disabled={pending}>
-          {pending ? "Salvataggio…" : "Salva"}
+          {pending ? "Saving…" : "Save"}
         </Button>
       </div>
     </form>

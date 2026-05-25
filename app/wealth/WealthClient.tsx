@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PatrimonioDrawer } from "@/components/forms/InvestmentDrawer";
+import { WealthDrawer } from "@/components/forms/InvestmentDrawer";
 import { EntryList } from "@/components/EntryList";
 import { NetWorthChart, type NetWorthPoint } from "@/components/charts/NetWorthChart";
 import { BreakdownPie, type BreakdownEntry } from "@/components/charts/BreakdownPie";
@@ -24,7 +24,7 @@ type Row = {
   note: string | null;
 };
 
-export function PatrimonioClient({
+export function WealthClient({
   investments,
   liquidity,
   netWorth,
@@ -53,7 +53,7 @@ export function PatrimonioClient({
     <div className="space-y-6">
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Andamento patrimonio</CardTitle>
+          <CardTitle className="text-sm">Net worth trend</CardTitle>
         </CardHeader>
         <CardContent>
           <NetWorthChart data={netWorth} />
@@ -62,7 +62,7 @@ export function PatrimonioClient({
 
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Mese su mese</CardTitle>
+          <CardTitle className="text-sm">Month over month</CardTitle>
         </CardHeader>
         <CardContent>
           <MoMBar data={mom} />
@@ -72,10 +72,10 @@ export function PatrimonioClient({
       <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)}>
         <div className="flex items-center justify-between gap-2">
           <TabsList>
-            <TabsTrigger value="investment">Investimenti</TabsTrigger>
-            <TabsTrigger value="liquidity">Liquidità</TabsTrigger>
+            <TabsTrigger value="investment">Investments</TabsTrigger>
+            <TabsTrigger value="liquidity">Liquidity</TabsTrigger>
           </TabsList>
-          <PatrimonioDrawer
+          <WealthDrawer
             kind={tab}
             customTags={tab === "investment" ? customInvTags : customLiqTags}
           />
@@ -84,7 +84,7 @@ export function PatrimonioClient({
         <TabsContent value="investment" className="space-y-4 mt-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm">Composizione investimenti (ultimo snapshot per tag)</CardTitle>
+              <CardTitle className="text-sm">Investments breakdown (latest snapshot per tag)</CardTitle>
             </CardHeader>
             <CardContent>
               <BreakdownPie data={invBreakdown} />
@@ -102,14 +102,14 @@ export function PatrimonioClient({
             }))}
             onDelete={deleteInvestment}
             onEdit={setEditingInvestmentId}
-            empty="Nessun investimento registrato — aggiungi il primo snapshot"
+            empty="No investments yet — add your first snapshot"
           />
         </TabsContent>
 
         <TabsContent value="liquidity" className="space-y-4 mt-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm">Composizione liquidità (ultimo snapshot per tag)</CardTitle>
+              <CardTitle className="text-sm">Liquidity breakdown (latest snapshot per tag)</CardTitle>
             </CardHeader>
             <CardContent>
               <BreakdownPie data={liqBreakdown} />
@@ -127,7 +127,7 @@ export function PatrimonioClient({
             }))}
             onDelete={deleteLiquidity}
             onEdit={setEditingLiquidityId}
-            empty="Nessuna liquidità registrata"
+            empty="No liquidity records yet"
           />
         </TabsContent>
       </Tabs>

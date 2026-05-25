@@ -45,31 +45,31 @@ export default async function HomePage() {
   const latestCashflow = cashflow[cashflow.length - 1];
 
   return (
-    <AppShell title="Finanze">
+    <AppShell title="Finances">
       <div className="space-y-6">
         <div className="grid grid-cols-1 gap-3">
           <SummaryCard
             label={
               latest
-                ? `Patrimonio · ${formatMonthLong(latest.monthYear)}`
-                : "Patrimonio"
+                ? `Net worth · ${formatMonthLong(latest.monthYear)}`
+                : "Net worth"
             }
             value={totalNetWorth}
             delta={deltaPct}
-            helpText={previous ? "vs mese precedente" : undefined}
+            helpText={previous ? "vs previous month" : undefined}
           />
           <div className="grid grid-cols-2 gap-3">
-            <SummaryCard label="Investimenti" value={latest?.investments ?? 0} />
-            <SummaryCard label="Liquidità" value={latest?.liquidity ?? 0} />
+            <SummaryCard label="Investments" value={latest?.investments ?? 0} />
+            <SummaryCard label="Liquidity" value={latest?.liquidity ?? 0} />
           </div>
           {latestCashflow ? (
             <div className="grid grid-cols-2 gap-3">
               <SummaryCard
-                label={`Entrate · ${formatMonthLong(latestCashflow.monthYear)}`}
+                label={`Income · ${formatMonthLong(latestCashflow.monthYear)}`}
                 value={latestCashflow.income}
               />
               <SummaryCard
-                label={`Uscite · ${formatMonthLong(latestCashflow.monthYear)}`}
+                label={`Expenses · ${formatMonthLong(latestCashflow.monthYear)}`}
                 value={latestCashflow.expense}
               />
             </div>
@@ -78,12 +78,12 @@ export default async function HomePage() {
 
         <Card>
           <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-sm">Andamento</CardTitle>
+            <CardTitle className="text-sm">Trend</CardTitle>
             <Link
-              href="/patrimonio"
+              href="/wealth"
               className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "gap-1 text-xs h-7")}
             >
-              Dettagli <ArrowRight className="size-3.5" />
+              Details <ArrowRight className="size-3.5" />
             </Link>
           </CardHeader>
           <CardContent>
@@ -93,12 +93,12 @@ export default async function HomePage() {
 
         <Card>
           <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-sm">Cashflow recente</CardTitle>
+            <CardTitle className="text-sm">Recent cashflow</CardTitle>
             <Link
               href="/cashflow"
               className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "gap-1 text-xs h-7")}
             >
-              Dettagli <ArrowRight className="size-3.5" />
+              Details <ArrowRight className="size-3.5" />
             </Link>
           </CardHeader>
           <CardContent>
@@ -110,14 +110,14 @@ export default async function HomePage() {
           <Card className="border-dashed">
             <CardContent className="p-4 text-sm text-muted-foreground text-center space-y-2">
               <p>
-                Non hai ancora dati. Importa il tuo storico dal Notion o aggiungi
-                manualmente i primi snapshot.
+                No data yet. Import your history from Notion or add your first
+                snapshots manually.
               </p>
               <Link
                 href="/import"
                 className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
               >
-                Vai a Import
+                Go to Import
               </Link>
             </CardContent>
           </Card>

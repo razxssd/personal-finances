@@ -24,7 +24,7 @@ export function NetWorthChart({ data }: { data: NetWorthPoint[] }) {
   if (data.length === 0) {
     return (
       <div className="flex h-56 items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground">
-        Nessun dato — aggiungi il primo snapshot
+        No data — add your first snapshot
       </div>
     );
   }
@@ -73,7 +73,7 @@ export function NetWorthChart({ data }: { data: NetWorthPoint[] }) {
           <Area
             type="monotone"
             dataKey="investments"
-            name="Investimenti"
+            name="Investments"
             stroke="#6366f1"
             strokeWidth={2}
             fill="url(#gInv)"
@@ -81,7 +81,7 @@ export function NetWorthChart({ data }: { data: NetWorthPoint[] }) {
           <Area
             type="monotone"
             dataKey="liquidity"
-            name="Liquidità"
+            name="Liquidity"
             stroke="#22c55e"
             strokeWidth={2}
             fill="url(#gLiq)"
@@ -89,7 +89,7 @@ export function NetWorthChart({ data }: { data: NetWorthPoint[] }) {
           <Line
             type="monotone"
             dataKey="total"
-            name="Totale"
+            name="Total"
             stroke="#64748b"
             strokeWidth={2}
             strokeDasharray="4 3"

@@ -18,7 +18,7 @@ export function ThemeToggle() {
       <Button
         size="icon-sm"
         variant="ghost"
-        aria-label="Cambia tema"
+        aria-label="Change theme"
         className="opacity-0 pointer-events-none"
       >
         <Sun className="size-4" />
@@ -33,10 +33,10 @@ export function ThemeToggle() {
   const Icon = active === "dark" ? Moon : active === "light" ? Sun : Monitor;
   const label =
     active === "dark"
-      ? "Tema scuro (passa a chiaro)"
+      ? "Dark theme (switch to light)"
       : active === "light"
-        ? "Tema chiaro (passa a sistema)"
-        : "Tema sistema (passa a scuro)";
+        ? "Light theme (switch to system)"
+        : "System theme (switch to dark)";
 
   return (
     <Button

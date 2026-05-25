@@ -41,7 +41,7 @@ export async function createInvestment(input: InvestmentInput) {
     note: data.note ?? null,
   });
   await ensureTag(userId, data.tag, "investment");
-  revalidatePath("/patrimonio");
+  revalidatePath("/wealth");
   revalidatePath("/");
 }
 
@@ -60,14 +60,14 @@ export async function updateInvestment(id: string, input: InvestmentInput) {
     })
     .where(and(eq(investments.id, id), eq(investments.userId, userId)));
   await ensureTag(userId, data.tag, "investment");
-  revalidatePath("/patrimonio");
+  revalidatePath("/wealth");
   revalidatePath("/");
 }
 
 export async function deleteInvestment(id: string) {
   const userId = await requireUser();
   await db.delete(investments).where(and(eq(investments.id, id), eq(investments.userId, userId)));
-  revalidatePath("/patrimonio");
+  revalidatePath("/wealth");
   revalidatePath("/");
 }
 
@@ -83,7 +83,7 @@ export async function createLiquidity(input: LiquidityInput) {
     note: data.note ?? null,
   });
   await ensureTag(userId, data.tag, "liquidity");
-  revalidatePath("/patrimonio");
+  revalidatePath("/wealth");
   revalidatePath("/");
 }
 
@@ -102,14 +102,14 @@ export async function updateLiquidity(id: string, input: LiquidityInput) {
     })
     .where(and(eq(liquidity.id, id), eq(liquidity.userId, userId)));
   await ensureTag(userId, data.tag, "liquidity");
-  revalidatePath("/patrimonio");
+  revalidatePath("/wealth");
   revalidatePath("/");
 }
 
 export async function deleteLiquidity(id: string) {
   const userId = await requireUser();
   await db.delete(liquidity).where(and(eq(liquidity.id, id), eq(liquidity.userId, userId)));
-  revalidatePath("/patrimonio");
+  revalidatePath("/wealth");
   revalidatePath("/");
 }
 
@@ -212,7 +212,7 @@ export async function createTag(input: { name: string; kind: TagKind; color?: st
   if (!existing[0]) {
     await db.insert(tags).values({ userId, name: data.name, kind: data.kind, color: data.color ?? null });
   }
-  revalidatePath("/patrimonio");
+  revalidatePath("/wealth");
   revalidatePath("/cashflow");
   revalidatePath("/settings");
 }
