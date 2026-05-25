@@ -14,7 +14,11 @@ import {
   exportAllAsJson,
 } from "@/lib/import/actions";
 
-type ImportFn = (csv: string) => Promise<{ inserted: number; errors: { line: number; message: string }[] }>;
+type ImportFn = (csv: string) => Promise<{
+  inserted: number;
+  skipped: number;
+  errors: { line: number; message: string }[];
+}>;
 
 function ImportCard({
   title,
@@ -42,13 +46,18 @@ function ImportCard({
         try {
           const res = await importFn(text);
           setErrors(res.errors);
+          const parts: string[] = [];
+          if (res.inserted > 0) parts.push(`${res.inserted} imported`);
+          if (res.skipped > 0) parts.push(`${res.skipped} duplicates skipped`);
+          if (res.errors.length > 0) parts.push(`${res.errors.length} invalid`);
+
           if (res.inserted > 0) {
-            toast.success(`Imported ${res.inserted} rows`);
-          }
-          if (res.errors.length > 0) {
-            toast.warning(`${res.errors.length} rows skipped — see details`);
-          }
-          if (res.inserted === 0 && res.errors.length === 0) {
+            toast.success(parts.join(" · "));
+          } else if (res.skipped > 0 && res.errors.length === 0) {
+            toast.info(`No new rows — ${res.skipped} duplicates skipped`);
+          } else if (res.errors.length > 0) {
+            toast.warning(parts.join(" · "));
+          } else {
             toast.info("Nothing to import");
           }
         } catch (err) {

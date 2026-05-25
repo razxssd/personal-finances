@@ -140,6 +140,15 @@ Header originale: `Source,Amount,Category,Date,Month` — parser dedicato in `li
 - `.env.example` con keys vuote come reference.
 - Clerk middleware redirect chiunque non sia `capanueduard98@gmail.com`.
 
+## Import dedup
+
+- L'import server action filtra le righe già presenti tramite **chiave naturale**:
+  - **Snapshot** (investments, liquidity): `(monthYear, tag, value, currency)`.
+  - **Transazioni** (income, expense, Notion expense): `(date, amount, tag, source)`.
+- Anche i duplicati *all'interno dello stesso CSV* sono filtrati (set `seen`).
+- Il toast finale mostra `N imported · M duplicates skipped · K invalid`.
+- Implicazioni: se per caso hai due cene da 30€ nella stessa data con stesso tag/source, la seconda sarà considerata duplicato. Edge case raro ma noto. Workaround: aggiungi note o source diverse, oppure inserisci manualmente.
+
 ## TODO / decisioni rimaste aperte
 
 - [ ] Provisioning Neon e Clerk su Vercel Marketplace (richiede browser, l'utente lo fa).
