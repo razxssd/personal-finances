@@ -90,7 +90,7 @@ export function NetWorthChart({ data }: { data: NetWorthPoint[] }) {
             type="monotone"
             dataKey="total"
             name="Totale"
-            stroke="#cbd5e1"
+            stroke="#64748b"
             strokeWidth={2}
             strokeDasharray="4 3"
             dot={false}

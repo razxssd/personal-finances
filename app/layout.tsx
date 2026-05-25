@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -47,13 +48,19 @@ export default function RootLayout({
     >
       <html
         lang="it"
-        className={`dark ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-        style={{ colorScheme: "dark" }}
+        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
         suppressHydrationWarning
       >
         <body className="min-h-dvh bg-background text-foreground flex flex-col">
-          {children}
-          <Toaster position="top-center" richColors />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster position="top-center" richColors />
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

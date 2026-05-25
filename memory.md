@@ -45,8 +45,10 @@ Il `Month` ha sempre suffisso ` (https://www.notion.so/...)`. Il parser lo strip
 
 ## Tema
 
-- **Dark mode di default** (sempre, no toggle). `class="dark"` hardcoded sull'`<html>`, `colorScheme: dark` propagato anche al Clerk provider.
-- Recharts ticks usano fill `#94a3b8` (slate-400), totale line `#cbd5e1` (slate-300) — leggibili su bg dark.
+- **`next-themes`** gestisce il tema: `defaultTheme="dark"`, `enableSystem`.
+- **Toggle** (`ThemeToggle`) nell'header dell'`AppShell`: ciclo dark → light → system → dark con icona Moon/Sun/Monitor.
+- **Clerk sign-in/up** stays dark sempre (`appearance.variables.colorScheme: 'dark'`) — meno friction per cambiare stile sul provider statico.
+- **Recharts neutrals**: tick fill `#94a3b8` (slate-400), total line stroke `#64748b` (slate-500) — leggibili su entrambi i temi.
 
 ## Vincoli UX (non negoziabili)
 

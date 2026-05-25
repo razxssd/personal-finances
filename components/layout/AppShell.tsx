@@ -1,4 +1,5 @@
 import { BottomNav } from "./BottomNav";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function AppShell({
   children,
@@ -18,7 +19,10 @@ export function AppShell({
             style={{ paddingTop: "max(0.75rem, env(safe-area-inset-top))" }}
           >
             <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
-            {action}
+            <div className="flex items-center gap-1">
+              <ThemeToggle />
+              {action}
+            </div>
           </div>
         </header>
       ) : null}
