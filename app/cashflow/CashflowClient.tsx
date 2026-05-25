@@ -151,60 +151,64 @@ export function CashflowClient({
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="expense" className="space-y-4 mt-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm">
-                Expenses breakdown · {breakdownLabel}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <BreakdownPie data={expenseBreakdown} />
-            </CardContent>
-          </Card>
-          <EntryList
-            entries={filteredExpenses.map((e) => ({
-              id: e.id,
-              primary: e.date,
-              primaryKind: "date" as const,
-              amount: e.amount,
-              currency: e.currency,
-              tag: e.tag,
-              source: e.source,
-              note: e.note,
-            }))}
-            onDelete={deleteExpense}
-            onEdit={setEditingExpenseId}
-            empty="No expenses in this period"
-          />
+        <TabsContent value="expense" className="mt-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">
+                  Expenses breakdown · {breakdownLabel}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <BreakdownPie data={expenseBreakdown} />
+              </CardContent>
+            </Card>
+            <EntryList
+              entries={filteredExpenses.map((e) => ({
+                id: e.id,
+                primary: e.date,
+                primaryKind: "date" as const,
+                amount: e.amount,
+                currency: e.currency,
+                tag: e.tag,
+                source: e.source,
+                note: e.note,
+              }))}
+              onDelete={deleteExpense}
+              onEdit={setEditingExpenseId}
+              empty="No expenses in this period"
+            />
+          </div>
         </TabsContent>
 
-        <TabsContent value="income" className="space-y-4 mt-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm">
-                Income breakdown · {breakdownLabel}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <BreakdownPie data={incomeBreakdown} />
-            </CardContent>
-          </Card>
-          <EntryList
-            entries={filteredIncomes.map((i) => ({
-              id: i.id,
-              primary: i.date,
-              primaryKind: "date" as const,
-              amount: i.amount,
-              currency: i.currency,
-              tag: i.tag,
-              source: i.source,
-              note: i.note,
-            }))}
-            onDelete={deleteIncome}
-            onEdit={setEditingIncomeId}
-            empty="No income in this period"
-          />
+        <TabsContent value="income" className="mt-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">
+                  Income breakdown · {breakdownLabel}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <BreakdownPie data={incomeBreakdown} />
+              </CardContent>
+            </Card>
+            <EntryList
+              entries={filteredIncomes.map((i) => ({
+                id: i.id,
+                primary: i.date,
+                primaryKind: "date" as const,
+                amount: i.amount,
+                currency: i.currency,
+                tag: i.tag,
+                source: i.source,
+                note: i.note,
+              }))}
+              onDelete={deleteIncome}
+              onEdit={setEditingIncomeId}
+              empty="No income in this period"
+            />
+          </div>
         </TabsContent>
       </Tabs>
 

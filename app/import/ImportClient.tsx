@@ -156,40 +156,42 @@ export function ImportClient() {
         </CardContent>
       </Card>
 
-      <ImportCard
-        title="Notion — Expenses"
-        description="Upload the Notion Expenses database export directly (columns: Source, Amount, Category, Date, Month). The $ prefix is stripped, amounts are stored as EUR."
-        importFn={importNotionExpensesCsv}
-        acceptLabel="Upload Notion CSV"
-      />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+        <ImportCard
+          title="Notion — Expenses"
+          description="Upload the Notion Expenses database export directly (columns: Source, Amount, Category, Date, Month). The $ prefix is stripped, amounts are stored as EUR."
+          importFn={importNotionExpensesCsv}
+          acceptLabel="Upload Notion CSV"
+        />
 
-      <ImportCard
-        title="Investments — monthly snapshots"
-        description="CSV with columns: month (YYYY-MM), value, currency, tag, note"
-        templateUrl="/templates/investments.csv"
-        importFn={importInvestmentsCsv}
-      />
+        <ImportCard
+          title="Investments — monthly snapshots"
+          description="CSV with columns: month (YYYY-MM), value, currency, tag, note"
+          templateUrl="/templates/investments.csv"
+          importFn={importInvestmentsCsv}
+        />
 
-      <ImportCard
-        title="Liquidity — monthly snapshots"
-        description="CSV with columns: month (YYYY-MM), value, currency, tag, note"
-        templateUrl="/templates/liquidity.csv"
-        importFn={importLiquidityCsv}
-      />
+        <ImportCard
+          title="Liquidity — monthly snapshots"
+          description="CSV with columns: month (YYYY-MM), value, currency, tag, note"
+          templateUrl="/templates/liquidity.csv"
+          importFn={importLiquidityCsv}
+        />
 
-      <ImportCard
-        title="Income — transactions"
-        description="CSV with columns: date (YYYY-MM-DD), amount, currency, tag, source, note"
-        templateUrl="/templates/income.csv"
-        importFn={importIncomesCsv}
-      />
+        <ImportCard
+          title="Income — transactions"
+          description="CSV with columns: date (YYYY-MM-DD), amount, currency, tag, source, note"
+          templateUrl="/templates/income.csv"
+          importFn={importIncomesCsv}
+        />
 
-      <ImportCard
-        title="Expenses — transactions"
-        description="CSV with columns: date (YYYY-MM-DD), amount, currency, tag, source, note"
-        templateUrl="/templates/expenses.csv"
-        importFn={importExpensesCsv}
-      />
+        <ImportCard
+          title="Expenses — transactions"
+          description="CSV with columns: date (YYYY-MM-DD), amount, currency, tag, source, note"
+          templateUrl="/templates/expenses.csv"
+          importFn={importExpensesCsv}
+        />
+      </div>
     </div>
   );
 }

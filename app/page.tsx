@@ -47,23 +47,23 @@ export default async function HomePage() {
   return (
     <AppShell title="Finances">
       <div className="space-y-6">
-        <div className="grid grid-cols-1 gap-3">
-          <SummaryCard
-            label={
-              latest
-                ? `Net worth · ${formatMonthLong(latest.monthYear)}`
-                : "Net worth"
-            }
-            value={totalNetWorth}
-            delta={deltaPct}
-            helpText={previous ? "vs previous month" : undefined}
-          />
-          <div className="grid grid-cols-2 gap-3">
-            <SummaryCard label="Investments" value={latest?.investments ?? 0} />
-            <SummaryCard label="Liquidity" value={latest?.liquidity ?? 0} />
+        <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
+          <div className="col-span-2 lg:col-span-4">
+            <SummaryCard
+              label={
+                latest
+                  ? `Net worth · ${formatMonthLong(latest.monthYear)}`
+                  : "Net worth"
+              }
+              value={totalNetWorth}
+              delta={deltaPct}
+              helpText={previous ? "vs previous month" : undefined}
+            />
           </div>
+          <SummaryCard label="Investments" value={latest?.investments ?? 0} />
+          <SummaryCard label="Liquidity" value={latest?.liquidity ?? 0} />
           {latestCashflow ? (
-            <div className="grid grid-cols-2 gap-3">
+            <>
               <SummaryCard
                 label={`Income · ${formatMonthLong(latestCashflow.monthYear)}`}
                 value={latestCashflow.income}
@@ -72,39 +72,41 @@ export default async function HomePage() {
                 label={`Expenses · ${formatMonthLong(latestCashflow.monthYear)}`}
                 value={latestCashflow.expense}
               />
-            </div>
+            </>
           ) : null}
         </div>
 
-        <Card>
-          <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-sm">Trend</CardTitle>
-            <Link
-              href="/wealth"
-              className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "gap-1 text-xs h-7")}
-            >
-              Details <ArrowRight className="size-3.5" />
-            </Link>
-          </CardHeader>
-          <CardContent>
-            <NetWorthChart data={netWorth} />
-          </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+              <CardTitle className="text-sm">Trend</CardTitle>
+              <Link
+                href="/wealth"
+                className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "gap-1 text-xs h-7")}
+              >
+                Details <ArrowRight className="size-3.5" />
+              </Link>
+            </CardHeader>
+            <CardContent>
+              <NetWorthChart data={netWorth} />
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
-            <CardTitle className="text-sm">Recent cashflow</CardTitle>
-            <Link
-              href="/cashflow"
-              className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "gap-1 text-xs h-7")}
-            >
-              Details <ArrowRight className="size-3.5" />
-            </Link>
-          </CardHeader>
-          <CardContent>
-            <CashflowBars data={cashflow.slice(-6)} />
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+              <CardTitle className="text-sm">Recent cashflow</CardTitle>
+              <Link
+                href="/cashflow"
+                className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "gap-1 text-xs h-7")}
+              >
+                Details <ArrowRight className="size-3.5" />
+              </Link>
+            </CardHeader>
+            <CardContent>
+              <CashflowBars data={cashflow.slice(-6)} />
+            </CardContent>
+          </Card>
+        </div>
 
         {netWorth.length === 0 && incomes.length === 0 && expenses.length === 0 ? (
           <Card className="border-dashed">

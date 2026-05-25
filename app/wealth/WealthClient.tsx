@@ -51,23 +51,25 @@ export function WealthClient({
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Net worth trend</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <NetWorthChart data={netWorth} />
-        </CardContent>
-      </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm">Net worth trend</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <NetWorthChart data={netWorth} />
+          </CardContent>
+        </Card>
 
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm">Month over month</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <MoMBar data={mom} />
-        </CardContent>
-      </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm">Month over month</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <MoMBar data={mom} />
+          </CardContent>
+        </Card>
+      </div>
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as typeof tab)}>
         <div className="flex items-center justify-between gap-2">
@@ -81,54 +83,58 @@ export function WealthClient({
           />
         </div>
 
-        <TabsContent value="investment" className="space-y-4 mt-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm">Investments breakdown (latest snapshot per tag)</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <BreakdownPie data={invBreakdown} />
-            </CardContent>
-          </Card>
-          <EntryList
-            entries={investments.map((i) => ({
-              id: i.id,
-              primary: i.monthYear,
-              primaryKind: "month" as const,
-              amount: i.value,
-              currency: i.currency,
-              tag: i.tag,
-              note: i.note,
-            }))}
-            onDelete={deleteInvestment}
-            onEdit={setEditingInvestmentId}
-            empty="No investments yet — add your first snapshot"
-          />
+        <TabsContent value="investment" className="mt-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Investments breakdown (latest snapshot per tag)</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <BreakdownPie data={invBreakdown} />
+              </CardContent>
+            </Card>
+            <EntryList
+              entries={investments.map((i) => ({
+                id: i.id,
+                primary: i.monthYear,
+                primaryKind: "month" as const,
+                amount: i.value,
+                currency: i.currency,
+                tag: i.tag,
+                note: i.note,
+              }))}
+              onDelete={deleteInvestment}
+              onEdit={setEditingInvestmentId}
+              empty="No investments yet — add your first snapshot"
+            />
+          </div>
         </TabsContent>
 
-        <TabsContent value="liquidity" className="space-y-4 mt-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm">Liquidity breakdown (latest snapshot per tag)</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <BreakdownPie data={liqBreakdown} />
-            </CardContent>
-          </Card>
-          <EntryList
-            entries={liquidity.map((l) => ({
-              id: l.id,
-              primary: l.monthYear,
-              primaryKind: "month" as const,
-              amount: l.value,
-              currency: l.currency,
-              tag: l.tag,
-              note: l.note,
-            }))}
-            onDelete={deleteLiquidity}
-            onEdit={setEditingLiquidityId}
-            empty="No liquidity records yet"
-          />
+        <TabsContent value="liquidity" className="mt-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Liquidity breakdown (latest snapshot per tag)</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <BreakdownPie data={liqBreakdown} />
+              </CardContent>
+            </Card>
+            <EntryList
+              entries={liquidity.map((l) => ({
+                id: l.id,
+                primary: l.monthYear,
+                primaryKind: "month" as const,
+                amount: l.value,
+                currency: l.currency,
+                tag: l.tag,
+                note: l.note,
+              }))}
+              onDelete={deleteLiquidity}
+              onEdit={setEditingLiquidityId}
+              empty="No liquidity records yet"
+            />
+          </div>
         </TabsContent>
       </Tabs>
 

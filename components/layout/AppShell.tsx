@@ -16,7 +16,7 @@ export function AppShell({
       {title ? (
         <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur-md">
           <div
-            className="mx-auto flex max-w-2xl items-center justify-between gap-3 px-4 py-3"
+            className="mx-auto flex max-w-2xl md:max-w-6xl items-center justify-between gap-3 px-4 md:px-6 py-3"
             style={{ paddingTop: "max(0.75rem, env(safe-area-inset-top))" }}
           >
             <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
@@ -28,7 +28,7 @@ export function AppShell({
           </div>
         </header>
       ) : null}
-      <main className="mx-auto w-full max-w-2xl flex-1 px-4 pb-[calc(5rem+env(safe-area-inset-bottom))] pt-4">
+      <main className="mx-auto w-full max-w-2xl md:max-w-6xl flex-1 px-4 md:px-6 pb-[calc(5rem+env(safe-area-inset-bottom))] pt-4 md:pt-6">
         {children}
       </main>
       <BottomNav />

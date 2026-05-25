@@ -23,6 +23,7 @@ App personale di Eduard per tracciare patrimonio (investimenti + liquidità) e c
 - **Currency display:** EUR di default, `Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' })`.
 - **Date display:** `format(date, 'MMM yyyy')` (default English locale).
 - **Mobile-first:** progetta per iPhone 12 Pro Max (428×926). Tap target ≥ 44pt, input font ≥ 16px (evita zoom iOS).
+- **Desktop responsive:** `AppShell` cresce a `max-w-6xl` da `md` (768px+). Pagine usano `grid-cols-1 lg:grid-cols-2` (1024px+) per affiancare chart/lista. Mobile resta single-column.
 - **Form di entry responsive:** `Drawer` (vaul) dal bottom su mobile (< 768px); `Dialog` centrato `sm:max-w-md` su desktop. Il wrapper `BottomSheet` decide in base a `useIsDesktop`.
 - **Numeric input:** `inputMode="decimal"` + `pattern="[0-9]*[.,]?[0-9]*"` per il keypad iOS.
 

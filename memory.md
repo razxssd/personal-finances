@@ -50,6 +50,12 @@ Il `Month` ha sempre suffisso ` (https://www.notion.so/...)`. Il parser lo strip
 - **Clerk sign-in/up** stays dark sempre (`appearance.variables.colorScheme: 'dark'`) — meno friction per cambiare stile sul provider statico.
 - **Recharts neutrals**: tick fill `#94a3b8` (slate-400), total line stroke `#64748b` (slate-500) — leggibili su entrambi i temi.
 
+## Layout desktop
+
+- `AppShell` main widens from `max-w-2xl` (mobile) to `max-w-6xl` at `md+` (768px+).
+- Pages use `grid-cols-1 lg:grid-cols-2` (1024px+) to render charts and lists side-by-side on wide screens.
+- Mobile single-column flow is preserved — `lg:` breakpoint chosen so iPad portrait (768) still gets single col, only laptops/desktops trigger multi-col.
+
 ## Vincoli UX (non negoziabili)
 
 - iPhone 12 Pro Max è il device di riferimento.
