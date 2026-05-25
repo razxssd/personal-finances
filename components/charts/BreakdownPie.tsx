@@ -47,7 +47,7 @@ export function BreakdownPie({ data }: { data: BreakdownEntry[] }) {
         </ResponsiveContainer>
       </div>
       <ul className="space-y-1.5 text-sm self-center">
-        {data
+        {[...data]
           .sort((a, b) => b.value - a.value)
           .map((d) => (
             <li key={d.tag} className="flex items-center gap-2">

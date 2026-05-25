@@ -2,12 +2,14 @@
 
 import {
   ResponsiveContainer,
-  AreaChart,
+  ComposedChart,
   Area,
+  Line,
   XAxis,
   YAxis,
   Tooltip,
   CartesianGrid,
+  Legend,
 } from "recharts";
 import { formatEUR, formatEURCompact, formatMonthLabel } from "@/lib/format";
 
@@ -29,27 +31,27 @@ export function NetWorthChart({ data }: { data: NetWorthPoint[] }) {
   return (
     <div className="h-64 w-full">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+        <ComposedChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="gInv" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#6366f1" stopOpacity={0.6} />
+              <stop offset="0%" stopColor="#6366f1" stopOpacity={0.45} />
               <stop offset="100%" stopColor="#6366f1" stopOpacity={0} />
             </linearGradient>
             <linearGradient id="gLiq" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#22c55e" stopOpacity={0.6} />
+              <stop offset="0%" stopColor="#22c55e" stopOpacity={0.45} />
               <stop offset="100%" stopColor="#22c55e" stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
           <XAxis
             dataKey="monthYear"
-            tickFormatter={formatMonthLabel}
+            tickFormatter={(l) => formatMonthLabel(String(l))}
             tick={{ fontSize: 11 }}
             interval="preserveStartEnd"
             minTickGap={24}
           />
           <YAxis
-            tickFormatter={formatEURCompact}
+            tickFormatter={(v) => formatEURCompact(Number(v))}
             tick={{ fontSize: 11 }}
             width={50}
           />
@@ -63,23 +65,37 @@ export function NetWorthChart({ data }: { data: NetWorthPoint[] }) {
               fontSize: 12,
             }}
           />
+          <Legend
+            wrapperStyle={{ fontSize: 11, paddingTop: 4 }}
+            iconType="circle"
+            iconSize={8}
+          />
           <Area
             type="monotone"
             dataKey="investments"
-            stackId="1"
+            name="Investimenti"
             stroke="#6366f1"
-            fill="url(#gInv)"
             strokeWidth={2}
+            fill="url(#gInv)"
           />
           <Area
             type="monotone"
             dataKey="liquidity"
-            stackId="1"
+            name="Liquidità"
             stroke="#22c55e"
-            fill="url(#gLiq)"
             strokeWidth={2}
+            fill="url(#gLiq)"
           />
-        </AreaChart>
+          <Line
+            type="monotone"
+            dataKey="total"
+            name="Totale"
+            stroke="#64748b"
+            strokeWidth={2}
+            strokeDasharray="4 3"
+            dot={false}
+          />
+        </ComposedChart>
       </ResponsiveContainer>
     </div>
   );
