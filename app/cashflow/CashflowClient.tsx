@@ -14,20 +14,29 @@ type IRow = {
   id: string;
   date: string;
   amount: string;
+  amountEUR: number;
   currency: string;
   tag: string;
   source: string | null;
   note: string | null;
 };
 
+function buildBreakdown(rows: IRow[], opts?: { excludeInvestments?: boolean }): BreakdownEntry[] {
+  const byTag = new Map<string, number>();
+  for (const r of rows) {
+    if (opts?.excludeInvestments && r.tag === "Investments") continue;
+    byTag.set(r.tag, (byTag.get(r.tag) ?? 0) + r.amountEUR);
+  }
+  return [...byTag.entries()]
+    .map(([tag, value]) => ({ tag, value }))
+    .sort((a, b) => b.value - a.value);
+}
+
 export function CashflowClient({
   incomes,
   expenses,
   monthly,
   monthlyNoInvestments,
-  expenseBreakdown,
-  expenseBreakdownNoInvestments,
-  incomeBreakdown,
   customIncomeTags,
   customExpenseTags,
 }: {
@@ -35,19 +44,12 @@ export function CashflowClient({
   expenses: IRow[];
   monthly: CashflowPoint[];
   monthlyNoInvestments: CashflowPoint[];
-  expenseBreakdown: BreakdownEntry[];
-  expenseBreakdownNoInvestments: BreakdownEntry[];
-  incomeBreakdown: BreakdownEntry[];
   customIncomeTags: string[];
   customExpenseTags: string[];
 }) {
   const [excludeInvestments, setExcludeInvestments] = useState(false);
   const [tab, setTab] = useState<"expense" | "income">("expense");
-
-  const chartData = excludeInvestments ? monthlyNoInvestments : monthly;
-  const expBreakdown = excludeInvestments
-    ? expenseBreakdownNoInvestments
-    : expenseBreakdown;
+  const [selectedMonth, setSelectedMonth] = useState<string>("all");
 
   const months = useMemo(() => {
     const set = new Set<string>();
@@ -55,8 +57,6 @@ export function CashflowClient({
     expenses.forEach((e) => set.add(e.date.slice(0, 7)));
     return [...set].sort().reverse();
   }, [incomes, expenses]);
-
-  const [selectedMonth, setSelectedMonth] = useState<string>("all");
 
   const filteredIncomes = useMemo(
     () =>
@@ -72,6 +72,19 @@ export function CashflowClient({
         : expenses.filter((e) => e.date.slice(0, 7) === selectedMonth),
     [expenses, selectedMonth]
   );
+
+  const chartData = excludeInvestments ? monthlyNoInvestments : monthly;
+  const expenseBreakdown = useMemo(
+    () => buildBreakdown(filteredExpenses, { excludeInvestments }),
+    [filteredExpenses, excludeInvestments]
+  );
+  const incomeBreakdown = useMemo(
+    () => buildBreakdown(filteredIncomes),
+    [filteredIncomes]
+  );
+
+  const breakdownLabel =
+    selectedMonth === "all" ? "tutti i mesi" : selectedMonth;
 
   return (
     <div className="space-y-6">
@@ -132,10 +145,12 @@ export function CashflowClient({
         <TabsContent value="expense" className="space-y-4 mt-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm">Breakdown uscite</CardTitle>
+              <CardTitle className="text-sm">
+                Breakdown uscite · {breakdownLabel}
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <BreakdownPie data={expBreakdown} />
+              <BreakdownPie data={expenseBreakdown} />
             </CardContent>
           </Card>
           <EntryList
@@ -157,7 +172,9 @@ export function CashflowClient({
         <TabsContent value="income" className="space-y-4 mt-4">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm">Breakdown entrate</CardTitle>
+              <CardTitle className="text-sm">
+                Breakdown entrate · {breakdownLabel}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <BreakdownPie data={incomeBreakdown} />

@@ -7,7 +7,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { UserButton } from "@clerk/nextjs";
 import {
   listInvestments,
   listLiquidity,
@@ -46,14 +45,7 @@ export default async function HomePage() {
   const latestCashflow = cashflow[cashflow.length - 1];
 
   return (
-    <AppShell
-      title="Finanze"
-      action={
-        <UserButton
-          appearance={{ elements: { avatarBox: "size-8" } }}
-        />
-      }
-    >
+    <AppShell title="Finanze">
       <div className="space-y-6">
         <div className="grid grid-cols-1 gap-3">
           <SummaryCard
