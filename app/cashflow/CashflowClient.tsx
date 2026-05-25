@@ -9,6 +9,10 @@ import { EntryList } from "@/components/EntryList";
 import { CashflowBars, type CashflowPoint } from "@/components/charts/CashflowBars";
 import { BreakdownPie, type BreakdownEntry } from "@/components/charts/BreakdownPie";
 import { deleteIncome, deleteExpense } from "@/lib/actions";
+import {
+  EditIncomeDrawer,
+  EditExpenseDrawer,
+} from "@/components/forms/EditDrawers";
 
 type IRow = {
   id: string;
@@ -50,6 +54,11 @@ export function CashflowClient({
   const [excludeInvestments, setExcludeInvestments] = useState(false);
   const [tab, setTab] = useState<"expense" | "income">("expense");
   const [selectedMonth, setSelectedMonth] = useState<string>("all");
+  const [editingIncomeId, setEditingIncomeId] = useState<string | null>(null);
+  const [editingExpenseId, setEditingExpenseId] = useState<string | null>(null);
+
+  const editingIncome = incomes.find((i) => i.id === editingIncomeId) ?? null;
+  const editingExpense = expenses.find((e) => e.id === editingExpenseId) ?? null;
 
   const months = useMemo(() => {
     const set = new Set<string>();
@@ -165,6 +174,7 @@ export function CashflowClient({
               note: e.note,
             }))}
             onDelete={deleteExpense}
+            onEdit={setEditingExpenseId}
             empty="Nessuna uscita nel periodo"
           />
         </TabsContent>
@@ -192,10 +202,26 @@ export function CashflowClient({
               note: i.note,
             }))}
             onDelete={deleteIncome}
+            onEdit={setEditingIncomeId}
             empty="Nessuna entrata nel periodo"
           />
         </TabsContent>
       </Tabs>
+
+      {editingExpense ? (
+        <EditExpenseDrawer
+          row={editingExpense}
+          customTags={customExpenseTags}
+          onClose={() => setEditingExpenseId(null)}
+        />
+      ) : null}
+      {editingIncome ? (
+        <EditIncomeDrawer
+          row={editingIncome}
+          customTags={customIncomeTags}
+          onClose={() => setEditingIncomeId(null)}
+        />
+      ) : null}
     </div>
   );
 }

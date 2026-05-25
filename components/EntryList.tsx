@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { Trash2 } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,10 +23,12 @@ type Entry = {
 export function EntryList({
   entries,
   onDelete,
+  onEdit,
   empty,
 }: {
   entries: Entry[];
   onDelete: (id: string) => Promise<void>;
+  onEdit?: (id: string) => void;
   empty?: string;
 }) {
   const [pending, startTransition] = useTransition();
@@ -72,26 +74,42 @@ export function EntryList({
                   <p className="font-semibold tabular-nums">
                     {e.currency === "EUR" ? formatEUR(e.amount) : `${e.amount} ${e.currency}`}
                   </p>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="ghost"
-                    className="h-7 px-2 text-muted-foreground hover:text-destructive"
-                    disabled={pending}
-                    onClick={() => {
-                      if (!confirm("Eliminare questa voce?")) return;
-                      startTransition(async () => {
-                        try {
-                          await onDelete(e.id);
-                          toast.success("Eliminato");
-                        } catch (err) {
-                          toast.error((err as Error).message);
-                        }
-                      });
-                    }}
-                  >
-                    <Trash2 className="size-3.5" />
-                  </Button>
+                  <div className="flex justify-end -mr-1">
+                    {onEdit ? (
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="ghost"
+                        className="h-7 px-2 text-muted-foreground hover:text-foreground"
+                        disabled={pending}
+                        onClick={() => onEdit(e.id)}
+                        aria-label="Modifica"
+                      >
+                        <Pencil className="size-3.5" />
+                      </Button>
+                    ) : null}
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      className="h-7 px-2 text-muted-foreground hover:text-destructive"
+                      disabled={pending}
+                      onClick={() => {
+                        if (!confirm("Eliminare questa voce?")) return;
+                        startTransition(async () => {
+                          try {
+                            await onDelete(e.id);
+                            toast.success("Eliminato");
+                          } catch (err) {
+                            toast.error((err as Error).message);
+                          }
+                        });
+                      }}
+                      aria-label="Elimina"
+                    >
+                      <Trash2 className="size-3.5" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             </CardContent>

@@ -10,6 +10,10 @@ import { BreakdownPie, type BreakdownEntry } from "@/components/charts/Breakdown
 import { MoMBar } from "@/components/charts/MoMBar";
 import { deleteInvestment, deleteLiquidity } from "@/lib/actions";
 import { momDelta } from "@/lib/momDelta";
+import {
+  EditInvestmentDrawer,
+  EditLiquidityDrawer,
+} from "@/components/forms/EditDrawers";
 
 type Row = {
   id: string;
@@ -38,7 +42,12 @@ export function PatrimonioClient({
   customLiqTags: string[];
 }) {
   const [tab, setTab] = useState<"investment" | "liquidity">("investment");
+  const [editingInvestmentId, setEditingInvestmentId] = useState<string | null>(null);
+  const [editingLiquidityId, setEditingLiquidityId] = useState<string | null>(null);
   const mom = momDelta(netWorth.map((n) => ({ monthYear: n.monthYear, total: n.total })));
+
+  const editingInvestment = investments.find((i) => i.id === editingInvestmentId) ?? null;
+  const editingLiquidity = liquidity.find((l) => l.id === editingLiquidityId) ?? null;
 
   return (
     <div className="space-y-6">
@@ -92,6 +101,7 @@ export function PatrimonioClient({
               note: i.note,
             }))}
             onDelete={deleteInvestment}
+            onEdit={setEditingInvestmentId}
             empty="Nessun investimento registrato — aggiungi il primo snapshot"
           />
         </TabsContent>
@@ -116,10 +126,26 @@ export function PatrimonioClient({
               note: l.note,
             }))}
             onDelete={deleteLiquidity}
+            onEdit={setEditingLiquidityId}
             empty="Nessuna liquidità registrata"
           />
         </TabsContent>
       </Tabs>
+
+      {editingInvestment ? (
+        <EditInvestmentDrawer
+          row={editingInvestment}
+          customTags={customInvTags}
+          onClose={() => setEditingInvestmentId(null)}
+        />
+      ) : null}
+      {editingLiquidity ? (
+        <EditLiquidityDrawer
+          row={editingLiquidity}
+          customTags={customLiqTags}
+          onClose={() => setEditingLiquidityId(null)}
+        />
+      ) : null}
     </div>
   );
 }
