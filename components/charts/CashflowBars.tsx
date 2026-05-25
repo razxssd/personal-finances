@@ -35,10 +35,10 @@ export function CashflowBars({ data }: { data: CashflowPoint[] }) {
           <XAxis
             dataKey="monthYear"
             tickFormatter={formatMonthLabel}
-            tick={{ fontSize: 11 }}
+            tick={{ fontSize: 11, fill: "#94a3b8" }}
             minTickGap={24}
           />
-          <YAxis tickFormatter={formatEURCompact} tick={{ fontSize: 11 }} width={50} />
+          <YAxis tickFormatter={formatEURCompact} tick={{ fontSize: 11, fill: "#94a3b8" }} width={50} />
           <Tooltip
             formatter={(v) => formatEUR(Number(v))}
             labelFormatter={(l) => formatMonthLabel(String(l))}

@@ -46,13 +46,13 @@ export function NetWorthChart({ data }: { data: NetWorthPoint[] }) {
           <XAxis
             dataKey="monthYear"
             tickFormatter={(l) => formatMonthLabel(String(l))}
-            tick={{ fontSize: 11 }}
+            tick={{ fontSize: 11, fill: "#94a3b8" }}
             interval="preserveStartEnd"
             minTickGap={24}
           />
           <YAxis
             tickFormatter={(v) => formatEURCompact(Number(v))}
-            tick={{ fontSize: 11 }}
+            tick={{ fontSize: 11, fill: "#94a3b8" }}
             width={50}
           />
           <Tooltip
@@ -90,7 +90,7 @@ export function NetWorthChart({ data }: { data: NetWorthPoint[] }) {
             type="monotone"
             dataKey="total"
             name="Totale"
-            stroke="#64748b"
+            stroke="#cbd5e1"
             strokeWidth={2}
             strokeDasharray="4 3"
             dot={false}

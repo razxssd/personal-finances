@@ -18,6 +18,7 @@ App personale di Eduard per tracciare patrimonio (investimenti + liquidità) e c
 
 ## Convenzioni
 
+- **Tema:** dark mode hardcoded come default. `class="dark"` + `style={colorScheme:'dark'}` su `<html>`. Niente toggle (per ora).
 - **Lingua UI:** italiano. **Codice/identifiers/comments:** inglese.
 - **Currency display:** EUR di default, `Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' })`.
 - **Date display:** `format(date, 'MMM yyyy', { locale: it })` o equivalente.

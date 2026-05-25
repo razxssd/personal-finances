@@ -43,6 +43,11 @@ Le righe Apr/May 2026 hanno `Date` vuoto. Il parser usa la colonna `Month` ("Apr
 ### URL Notion nel campo Month
 Il `Month` ha sempre suffisso ` (https://www.notion.so/...)`. Il parser lo strippa.
 
+## Tema
+
+- **Dark mode di default** (sempre, no toggle). `class="dark"` hardcoded sull'`<html>`, `colorScheme: dark` propagato anche al Clerk provider.
+- Recharts ticks usano fill `#94a3b8` (slate-400), totale line `#cbd5e1` (slate-300) — leggibili su bg dark.
+
 ## Vincoli UX (non negoziabili)
 
 - iPhone 12 Pro Max è il device di riferimento.
