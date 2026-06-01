@@ -220,6 +220,7 @@ export function ImportClient() {
         <ImportCard
           title="Notion — Expenses"
           description="Upload the Notion Expenses database export directly (columns: Source, Amount, Category, Date, Month). The $ prefix is stripped, amounts are stored as EUR."
+          templateUrl="/templates/notion-expenses.csv"
           prompt={NOTION_EXPENSES_PROMPT}
           importFn={importNotionExpensesCsv}
           acceptLabel="Upload Notion CSV"
