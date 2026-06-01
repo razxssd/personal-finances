@@ -41,7 +41,10 @@ export function BreakdownPie({ data }: { data: BreakdownEntry[] }) {
                 border: "1px solid var(--border)",
                 borderRadius: 8,
                 fontSize: 12,
+                color: "var(--popover-foreground)",
               }}
+              labelStyle={{ color: "var(--popover-foreground)" }}
+              itemStyle={{ color: "var(--popover-foreground)" }}
             />
           </PieChart>
         </ResponsiveContainer>

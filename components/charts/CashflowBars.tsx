@@ -42,12 +42,16 @@ export function CashflowBars({ data }: { data: CashflowPoint[] }) {
           <Tooltip
             formatter={(v) => formatEUR(Number(v))}
             labelFormatter={(l) => formatMonthLabel(String(l))}
+            cursor={{ fill: "var(--muted)", opacity: 0.3 }}
             contentStyle={{
               background: "var(--popover)",
               border: "1px solid var(--border)",
               borderRadius: 8,
               fontSize: 12,
+              color: "var(--popover-foreground)",
             }}
+            labelStyle={{ color: "var(--popover-foreground)" }}
+            itemStyle={{ color: "var(--popover-foreground)" }}
           />
           <Legend wrapperStyle={{ fontSize: 12 }} />
           <Bar dataKey="income" name="Income" fill="#22c55e" radius={[4, 4, 0, 0]} />

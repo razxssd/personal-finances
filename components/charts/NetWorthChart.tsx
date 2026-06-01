@@ -58,12 +58,16 @@ export function NetWorthChart({ data }: { data: NetWorthPoint[] }) {
           <Tooltip
             formatter={(v) => formatEUR(Number(v))}
             labelFormatter={(l) => formatMonthLabel(String(l))}
+            cursor={{ stroke: "var(--muted-foreground)", strokeDasharray: "3 3" }}
             contentStyle={{
               background: "var(--popover)",
               border: "1px solid var(--border)",
               borderRadius: 8,
               fontSize: 12,
+              color: "var(--popover-foreground)",
             }}
+            labelStyle={{ color: "var(--popover-foreground)" }}
+            itemStyle={{ color: "var(--popover-foreground)" }}
           />
           <Legend
             wrapperStyle={{ fontSize: 11, paddingTop: 4 }}

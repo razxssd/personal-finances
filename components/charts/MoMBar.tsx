@@ -39,12 +39,16 @@ export function MoMBar({ data }: { data: MoMPoint[] }) {
           <Tooltip
             formatter={(v) => formatEUR(Number(v))}
             labelFormatter={(l) => formatMonthLabel(String(l))}
+            cursor={{ fill: "var(--muted)", opacity: 0.3 }}
             contentStyle={{
               background: "var(--popover)",
               border: "1px solid var(--border)",
               borderRadius: 8,
               fontSize: 12,
+              color: "var(--popover-foreground)",
             }}
+            labelStyle={{ color: "var(--popover-foreground)" }}
+            itemStyle={{ color: "var(--popover-foreground)" }}
           />
           <Bar dataKey="delta" radius={[6, 6, 0, 0]}>
             {data.map((d) => (
