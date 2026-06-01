@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Download, Upload } from "lucide-react";
+import { Download, Upload, Copy, Check } from "lucide-react";
 import {
   importInvestmentsCsv,
   importLiquidityCsv,
@@ -13,6 +13,13 @@ import {
   importNotionExpensesCsv,
   exportAllAsJson,
 } from "@/lib/import/actions";
+import {
+  INVESTMENTS_PROMPT,
+  LIQUIDITY_PROMPT,
+  INCOME_PROMPT,
+  EXPENSES_PROMPT,
+  NOTION_EXPENSES_PROMPT,
+} from "@/lib/import/prompts";
 
 type ImportFn = (csv: string) => Promise<{
   inserted: number;
@@ -20,16 +27,55 @@ type ImportFn = (csv: string) => Promise<{
   errors: { line: number; message: string }[];
 }>;
 
+function CopyPromptButton({ prompt }: { prompt: string }) {
+  const [copied, setCopied] = useState(false);
+  async function handleCopy() {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(prompt);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = prompt;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+      }
+      setCopied(true);
+      toast.success("Prompt copied — paste it into ChatGPT/Claude with your list");
+      setTimeout(() => setCopied(false), 1800);
+    } catch (err) {
+      toast.error((err as Error).message ?? "Copy failed");
+    }
+  }
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      className="inline-flex items-center justify-center gap-2 h-7 px-2.5 rounded-md border border-input bg-background text-[0.8rem] font-medium hover:bg-accent transition-colors"
+      aria-label="Copy LLM prompt"
+      title="Copy a prompt to give an LLM with your raw data"
+    >
+      {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+      {copied ? "Copied" : "Copy prompt"}
+    </button>
+  );
+}
+
 function ImportCard({
   title,
   description,
   templateUrl,
+  prompt,
   importFn,
   acceptLabel = "Upload CSV",
 }: {
   title: string;
   description: string;
   templateUrl?: string;
+  prompt?: string;
   importFn: ImportFn;
   acceptLabel?: string;
 }) {
@@ -88,6 +134,7 @@ function ImportCard({
               CSV template
             </a>
           ) : null}
+          {prompt ? <CopyPromptButton prompt={prompt} /> : null}
           <label className="flex-1">
             <input
               type="file"
@@ -169,6 +216,7 @@ export function ImportClient() {
         <ImportCard
           title="Notion — Expenses"
           description="Upload the Notion Expenses database export directly (columns: Source, Amount, Category, Date, Month). The $ prefix is stripped, amounts are stored as EUR."
+          prompt={NOTION_EXPENSES_PROMPT}
           importFn={importNotionExpensesCsv}
           acceptLabel="Upload Notion CSV"
         />
@@ -177,6 +225,7 @@ export function ImportClient() {
           title="Investments — monthly snapshots"
           description="CSV with columns: month (YYYY-MM), value, currency, tag, note"
           templateUrl="/templates/investments.csv"
+          prompt={INVESTMENTS_PROMPT}
           importFn={importInvestmentsCsv}
         />
 
@@ -184,6 +233,7 @@ export function ImportClient() {
           title="Liquidity — monthly snapshots"
           description="CSV with columns: month (YYYY-MM), value, currency, tag, note"
           templateUrl="/templates/liquidity.csv"
+          prompt={LIQUIDITY_PROMPT}
           importFn={importLiquidityCsv}
         />
 
@@ -191,6 +241,7 @@ export function ImportClient() {
           title="Income — transactions"
           description="CSV with columns: date (YYYY-MM-DD), amount, currency, tag, source, note"
           templateUrl="/templates/income.csv"
+          prompt={INCOME_PROMPT}
           importFn={importIncomesCsv}
         />
 
@@ -198,6 +249,7 @@ export function ImportClient() {
           title="Expenses — transactions"
           description="CSV with columns: date (YYYY-MM-DD), amount, currency, tag, source, note"
           templateUrl="/templates/expenses.csv"
+          prompt={EXPENSES_PROMPT}
           importFn={importExpensesCsv}
         />
       </div>
