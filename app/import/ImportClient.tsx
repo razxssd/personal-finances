@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Download, Upload, Copy, Check } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   importInvestmentsCsv,
   importLiquidityCsv,
@@ -51,16 +52,19 @@ function CopyPromptButton({ prompt }: { prompt: string }) {
     }
   }
   return (
-    <button
-      type="button"
-      onClick={handleCopy}
-      className="inline-flex items-center justify-center gap-2 h-7 px-2.5 rounded-md border border-input bg-background text-[0.8rem] font-medium hover:bg-accent transition-colors"
-      aria-label="Copy LLM prompt"
-      title="Copy a prompt to give an LLM with your raw data"
-    >
-      {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
-      {copied ? "Copied" : "Copy prompt"}
-    </button>
+    <Tooltip>
+      <TooltipTrigger
+        onClick={handleCopy}
+        aria-label="Copy LLM prompt"
+        className="inline-flex items-center justify-center size-7 rounded-md border border-input bg-background hover:bg-accent transition-colors text-muted-foreground hover:text-foreground"
+      >
+        {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+      </TooltipTrigger>
+      <TooltipContent className="max-w-xs text-xs leading-relaxed">
+        Copy an LLM prompt that turns a raw list into a ready-to-import CSV for this section.
+        Paste it into ChatGPT/Claude with your items.
+      </TooltipContent>
+    </Tooltip>
   );
 }
 
