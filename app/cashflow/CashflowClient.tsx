@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { CashflowDrawer } from "@/components/forms/CashflowDrawer";
+import { ExcludeInvestmentsToggle } from "@/components/ExcludeInvestmentsToggle";
+import { useExcludeInvestments } from "@/lib/hooks/useExcludeInvestments";
 import { EntryList } from "@/components/EntryList";
 import { CashflowBars, type CashflowPoint } from "@/components/charts/CashflowBars";
 import { BreakdownPie, type BreakdownEntry } from "@/components/charts/BreakdownPie";
@@ -43,6 +45,7 @@ export function CashflowClient({
   monthlyNoInvestments,
   customIncomeTags,
   customExpenseTags,
+  initialExcludeInvestments,
 }: {
   incomes: IRow[];
   expenses: IRow[];
@@ -50,8 +53,11 @@ export function CashflowClient({
   monthlyNoInvestments: CashflowPoint[];
   customIncomeTags: string[];
   customExpenseTags: string[];
+  initialExcludeInvestments: boolean;
 }) {
-  const [excludeInvestments, setExcludeInvestments] = useState(false);
+  const [excludeInvestments, setExcludeInvestments] = useExcludeInvestments(
+    initialExcludeInvestments
+  );
   const [tab, setTab] = useState<"expense" | "income">("expense");
   const [selectedMonth, setSelectedMonth] = useState<string>("all");
   const [editingIncomeId, setEditingIncomeId] = useState<string | null>(null);
@@ -100,15 +106,10 @@ export function CashflowClient({
       <Card>
         <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
           <CardTitle className="text-sm">Income vs Expenses</CardTitle>
-          <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer select-none">
-            <input
-              type="checkbox"
-              className="size-3.5 accent-foreground"
-              checked={excludeInvestments}
-              onChange={(e) => setExcludeInvestments(e.target.checked)}
-            />
-            Exclude “Investments”
-          </label>
+          <ExcludeInvestmentsToggle
+            checked={excludeInvestments}
+            onChange={setExcludeInvestments}
+          />
         </CardHeader>
         <CardContent>
           <CashflowBars data={chartData} />

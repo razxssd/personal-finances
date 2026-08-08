@@ -8,11 +8,13 @@ export function SummaryCard({
   value,
   delta,
   helpText,
+  note,
 }: {
   label: string;
   value: number;
   delta?: number;
   helpText?: string;
+  note?: string;
 }) {
   const Icon = delta === undefined || delta === 0 ? Minus : delta > 0 ? TrendingUp : TrendingDown;
   const tone =
@@ -34,6 +36,7 @@ export function SummaryCard({
             {helpText ? <span className="text-muted-foreground ml-1">{helpText}</span> : null}
           </p>
         ) : null}
+        {note ? <p className="mt-1 text-xs text-muted-foreground">{note}</p> : null}
       </CardContent>
     </Card>
   );

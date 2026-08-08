@@ -1,8 +1,13 @@
+import { cookies } from "next/headers";
 import { AppShell } from "@/components/layout/AppShell";
 import { CashflowClient } from "./CashflowClient";
 import { listIncomes, listExpenses, listTags } from "@/lib/db/queries";
 import { aggregateCashflowByMonth } from "@/lib/calc";
 import { convertToEUR } from "@/lib/fx";
+import {
+  EXCLUDE_INVESTMENTS_COOKIE,
+  parseExcludeInvestments,
+} from "@/lib/prefs";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +21,11 @@ async function withEUR<T extends { amount: string; currency: string }>(rows: T[]
 }
 
 export default async function CashflowPage() {
+  const cookieStore = await cookies();
+  const excludeInvestments = parseExcludeInvestments(
+    cookieStore.get(EXCLUDE_INVESTMENTS_COOKIE)?.value
+  );
+
   const [incomes, expenses, incTags, expTags] = await Promise.all([
     listIncomes(),
     listExpenses(),
@@ -55,6 +65,7 @@ export default async function CashflowPage() {
         }))}
         monthly={monthly}
         monthlyNoInvestments={monthlyNoInv}
+        initialExcludeInvestments={excludeInvestments}
         customIncomeTags={incTags.map((t) => t.name)}
         customExpenseTags={expTags.map((t) => t.name)}
       />
