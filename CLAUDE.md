@@ -90,11 +90,12 @@ L'utente può creare tag custom on-the-fly da qualsiasi combobox di tag.
 ## Mobile UX (vincoli forti)
 
 1. Form via `BottomSheet` wrapper — Drawer su mobile, Dialog centrato su desktop (breakpoint 768px).
-2. `useVisualViewport` hook per spostare il form quando si apre la tastiera iOS.
-3. Bottom nav con `padding-bottom: env(safe-area-inset-bottom)`.
-4. Grafici: max 7-8 data points visibili, paginazione per anno/quarter.
-5. Nessuno scroll orizzontale.
-6. PWA: `manifest.json`, `apple-touch-icon`, theme-color.
+2. **Tastiera iOS: non gestirla a mano.** Vaul riposiziona già il drawer da sé (`repositionInputs`, default true) e legge il `transform` del drawer per capire lo swipe: scrivere un nostro `transform` sopra spostava il foglio fuori posizione e falsava il drag. (Un hook `useVisualViewport` faceva esattamente questo — rimosso 2026-08-09.)
+3. **Popup dentro il Drawer: `container` obbligatorio.** Vaul è un dialog modale Radix, quindi mentre il drawer è aperto il `<body>` ha `pointer-events: none`. Un Popover/Select portalato su `<body>` risulta visibile ma non toccabile, e il tap attraversa fino all'overlay che chiude il drawer. `BottomSheet` espone il nodo del drawer via `PopupContainerProvider` e `ui/popover.tsx` + `ui/select.tsx` lo leggono con `usePopupContainer()`. Ogni nuovo primitive con portal deve fare lo stesso, più `data-vaul-no-drag` sul popup perché lo scroll interno non trascini il foglio.
+4. Bottom nav con `padding-bottom: env(safe-area-inset-bottom)`.
+5. Grafici: max 7-8 data points visibili, paginazione per anno/quarter.
+6. Nessuno scroll orizzontale.
+7. PWA: `manifest.json`, `apple-touch-icon`, theme-color.
 
 ## Comandi utili
 

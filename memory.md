@@ -149,6 +149,15 @@ Header originale: `Source,Amount,Category,Date,Month` — parser dedicato in `li
 - Il toast finale mostra `N imported · M duplicates skipped · K invalid`.
 - Implicazioni: se per caso hai due cene da 30€ nella stessa data con stesso tag/source, la seconda sarà considerata duplicato. Edge case raro ma noto. Workaround: aggiungi note o source diverse, oppure inserisci manualmente.
 
+## Form touch su iOS — bug e fix (2026-08-09)
+
+Segnalazione: aprendo il form "Add investment" da iPhone, i tap sui campi non facevano nulla e al secondo tap il foglio si chiudeva. Due cause distinte, entrambe verificate in WebKit con emulazione iPhone (Playwright):
+
+1. **Popup portalati fuori dal drawer.** Vaul è un dialog modale Radix → mentre il drawer è aperto `document.body` ha `pointer-events: none`. Tag combobox (Base UI Popover) e Currency (Base UI Select) si portalavano su `<body>`, quindi risultavano `pointer-events: none`: visibili ma non toccabili, e il tap attraversava fino a ciò che stava sotto (overlay → drawer chiuso). Misurato: `computedPointerEvents: "none"`, `elementFromPoint` restituiva l'elemento *sotto* il popup. Fix: `PopupContainerProvider` in `BottomSheet` passa il nodo del drawer come `container` del portal; `usePopupContainer()` in `ui/popover.tsx` e `ui/select.tsx`. Dopo il fix: `pointer-events: auto`, `insideDrawer: true`, selezione funzionante.
+2. **Doppia gestione della tastiera.** `useVisualViewport` applicava `translateY(-altezzaTastiera)` sul drawer, ma vaul riposiziona già da sé (`repositionInputs`, default true) **e** legge il `transform` del drawer (`getTranslate`) per calcolare lo swipe — quindi il nostro transform veniva letto come una trascinata di 336px. Con tastiera simulata il foglio finiva a `top: -137` (fuori schermo). Fix: hook rimosso, gestione lasciata a vaul.
+
+Note: il percorso desktop (Base UI `Dialog`) non era toccato e resta invariato — `body.pointer-events` lì è vuoto. Aggiunto `data-vaul-no-drag` sui popup così lo scroll interno non trascina il foglio. Con il popup dentro il drawer, il tasto Esc chiude anche il drawer (nessuna tastiera fisica su iPhone, ininfluente in pratica).
+
 ## TODO / decisioni rimaste aperte
 
 - [ ] Provisioning Neon e Clerk su Vercel Marketplace (richiede browser, l'utente lo fa).
