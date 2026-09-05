@@ -11,8 +11,8 @@ import {
   importLiquidityCsv,
   importNotionExpensesCsv,
   importNotionIncomesCsv,
-  exportAllAsJson,
 } from "@/lib/import/actions";
+import { downloadJsonBackup } from "@/lib/backup";
 import {
   INVESTMENTS_PROMPT,
   LIQUIDITY_PROMPT,
@@ -179,16 +179,7 @@ export function ImportClient() {
   async function handleExport() {
     setExporting(true);
     try {
-      const json = await exportAllAsJson();
-      const blob = new Blob([json], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `personal-finances-${new Date().toISOString().slice(0, 10)}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      await downloadJsonBackup();
       toast.success("Export downloaded");
     } catch (err) {
       toast.error((err as Error).message);

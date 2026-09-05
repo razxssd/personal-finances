@@ -1,5 +1,7 @@
 import type { TagKind } from "./db/schema";
 
+export const TAG_KINDS: TagKind[] = ["investment", "liquidity", "income", "expense"];
+
 export const PRESET_TAGS: Record<TagKind, string[]> = {
   investment: ["ETF", "Azioni", "Crypto", "Crypto-Meme"],
   liquidity: ["Cash", "Online Banking", "Benefits"],

@@ -1,8 +1,8 @@
 import "server-only";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "./index";
-import { investments, liquidity, incomes, expenses, tags } from "./schema";
-import { and, asc, desc, eq, gte, lte } from "drizzle-orm";
+import { investments, liquidity, incomes, expenses, tags, type TagKind } from "./schema";
+import { and, asc, count, desc, eq, gte, lte } from "drizzle-orm";
 
 export async function requireUser() {
   const { userId } = await auth();
@@ -61,4 +61,21 @@ export async function listTags(kind?: "investment" | "liquidity" | "income" | "e
     .from(tags)
     .where(and(...conditions))
     .orderBy(asc(tags.name));
+}
+
+/** Row count per dataset — what the Settings danger zone reports before a wipe. */
+export async function datasetCounts(): Promise<Record<TagKind, number>> {
+  const userId = await requireUser();
+  const [inv, liq, inc, exp] = await Promise.all([
+    db.select({ n: count() }).from(investments).where(eq(investments.userId, userId)),
+    db.select({ n: count() }).from(liquidity).where(eq(liquidity.userId, userId)),
+    db.select({ n: count() }).from(incomes).where(eq(incomes.userId, userId)),
+    db.select({ n: count() }).from(expenses).where(eq(expenses.userId, userId)),
+  ]);
+  return {
+    investment: inv[0]?.n ?? 0,
+    liquidity: liq[0]?.n ?? 0,
+    income: inc[0]?.n ?? 0,
+    expense: exp[0]?.n ?? 0,
+  };
 }

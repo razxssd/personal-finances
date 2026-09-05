@@ -16,6 +16,7 @@ import {
   type ExpenseInput,
 } from "@/lib/schemas";
 import { requireUser } from "@/lib/db/queries";
+import { TAG_KINDS } from "@/lib/tags";
 
 async function ensureTag(userId: string, name: string, kind: TagKind) {
   const trimmed = name.trim();
@@ -215,6 +216,65 @@ export async function createTag(input: { name: string; kind: TagKind; color?: st
   revalidatePath("/wealth");
   revalidatePath("/cashflow");
   revalidatePath("/settings");
+}
+
+/**
+ * Wipes every row of one dataset for the current user — the "start over and
+ * re-import" escape hatch. Tags are deliberately left alone: they are just
+ * labels, and an import recreates the ones it needs anyway.
+ */
+export async function resetDataset(kind: TagKind): Promise<{ deleted: number }> {
+  const userId = await requireUser();
+  let deleted: { id: string }[];
+  switch (kind) {
+    case "investment":
+      deleted = await db
+        .delete(investments)
+        .where(eq(investments.userId, userId))
+        .returning({ id: investments.id });
+      break;
+    case "liquidity":
+      deleted = await db
+        .delete(liquidity)
+        .where(eq(liquidity.userId, userId))
+        .returning({ id: liquidity.id });
+      break;
+    case "income":
+      deleted = await db
+        .delete(incomes)
+        .where(eq(incomes.userId, userId))
+        .returning({ id: incomes.id });
+      break;
+    case "expense":
+      deleted = await db
+        .delete(expenses)
+        .where(eq(expenses.userId, userId))
+        .returning({ id: expenses.id });
+      break;
+    default:
+      throw new Error("Unknown dataset");
+  }
+  revalidatePath("/wealth");
+  revalidatePath("/cashflow");
+  revalidatePath("/settings");
+  revalidatePath("/");
+  return { deleted: deleted.length };
+}
+
+/**
+ * Clears every custom tag of one kind. Preset tags live in code, so they are
+ * untouched — and so is the data: a row keeps its tag string either way, the
+ * tag table is only the suggestion list the comboboxes read.
+ */
+export async function deleteAllTags(kind: TagKind): Promise<{ deleted: number }> {
+  const userId = await requireUser();
+  if (!TAG_KINDS.includes(kind)) throw new Error("Unknown tag kind");
+  const deleted = await db
+    .delete(tags)
+    .where(and(eq(tags.userId, userId), eq(tags.kind, kind)))
+    .returning({ id: tags.id });
+  revalidatePath("/settings");
+  return { deleted: deleted.length };
 }
 
 export async function deleteTag(id: string) {

@@ -1,4 +1,5 @@
 import { BottomNav } from "./BottomNav";
+import { SettingsLink } from "./SettingsLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { UserButton } from "@clerk/nextjs";
 
@@ -22,6 +23,7 @@ export function AppShell({
             <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
             <div className="flex items-center gap-1">
               {action}
+              <SettingsLink />
               <ThemeToggle />
               <UserButton appearance={{ elements: { avatarBox: "size-8" } }} />
             </div>
