@@ -9,8 +9,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import {
   importInvestmentsCsv,
   importLiquidityCsv,
-  importIncomesCsv,
-  importExpensesCsv,
   importNotionExpensesCsv,
   importNotionIncomesCsv,
   exportAllAsJson,
@@ -18,8 +16,6 @@ import {
 import {
   INVESTMENTS_PROMPT,
   LIQUIDITY_PROMPT,
-  INCOME_PROMPT,
-  EXPENSES_PROMPT,
   NOTION_EXPENSES_PROMPT,
   NOTION_INCOME_PROMPT,
 } from "@/lib/import/prompts";
@@ -251,22 +247,6 @@ export function ImportClient() {
           templateUrl="/templates/liquidity.csv"
           prompt={LIQUIDITY_PROMPT}
           importFn={importLiquidityCsv}
-        />
-
-        <ImportCard
-          title="Income — transactions"
-          description="CSV with columns: date (YYYY-MM-DD), amount, currency, tag, source, note"
-          templateUrl="/templates/income.csv"
-          prompt={INCOME_PROMPT}
-          importFn={importIncomesCsv}
-        />
-
-        <ImportCard
-          title="Expenses — transactions"
-          description="CSV with columns: date (YYYY-MM-DD), amount, currency, tag, source, note"
-          templateUrl="/templates/expenses.csv"
-          prompt={EXPENSES_PROMPT}
-          importFn={importExpensesCsv}
         />
       </div>
     </div>

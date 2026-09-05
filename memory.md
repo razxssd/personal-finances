@@ -127,12 +127,13 @@ month,value,currency,tag,note
 2024-02,5150.00,EUR,ETF,VWCE
 ```
 
-### `templates/income.csv` e `expenses.csv`
-```
-date,amount,currency,tag,note
-2024-01-15,2500.00,EUR,Stipendio,
-2024-01-20,45.00,EUR,Eating Out,Cena con amici
-```
+### Income ed expenses entrano solo da Notion (2026-09-05)
+Le card generiche "Income — transactions" e "Expenses — transactions" sono state rimosse su
+richiesta di Eduard, con tutta la catena che le serviva: le server action `importIncomesCsv` /
+`importExpensesCsv` (erano endpoint pubblici, non solo UI), `parseTransactionCsv`, i prompt
+`INCOME_PROMPT` / `EXPENSES_PROMPT` e i template `income.csv` / `expenses.csv`. Restano i due
+importer Notion. `parseSnapshotCsv` invece resta: investments e liquidity non hanno un export
+Notion e continuano a passare dal CSV generico.
 
 ### Notion export (esistente)
 Header originale: `Source,Amount,Category,Date,Month` — parser dedicato in `lib/import/notion.ts`.

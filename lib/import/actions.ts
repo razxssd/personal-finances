@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { investments, liquidity, incomes, expenses, tags, type TagKind } from "@/lib/db/schema";
 import { requireUser } from "@/lib/db/queries";
-import { parseSnapshotCsv, parseTransactionCsv } from "./csv";
+import { parseSnapshotCsv } from "./csv";
 import { parseNotionTransactionsCsv } from "./notion";
 import { and, eq } from "drizzle-orm";
 
@@ -134,76 +134,6 @@ export async function importLiquidityCsv(csvText: string): Promise<ImportResult>
     await bulkEnsureTags(userId, toInsert.map((r) => r.tag), "liquidity");
   }
   revalidatePath("/wealth");
-  revalidatePath("/");
-  return { inserted: toInsert.length, skipped, errors };
-}
-
-export async function importIncomesCsv(csvText: string): Promise<ImportResult> {
-  const userId = await requireUser();
-  const { rows, errors } = parseTransactionCsv(csvText);
-  const existing = await existingTransactionKeys(incomes, userId);
-  const seen = new Set<string>();
-  const toInsert: typeof rows = [];
-  let skipped = 0;
-  for (const r of rows) {
-    const k = transactionKey(r.date, r.amount, r.tag, r.source);
-    if (existing.has(k) || seen.has(k)) {
-      skipped++;
-      continue;
-    }
-    seen.add(k);
-    toInsert.push(r);
-  }
-  if (toInsert.length > 0) {
-    await db.insert(incomes).values(
-      toInsert.map((r) => ({
-        userId,
-        date: r.date,
-        amount: r.amount.toString(),
-        currency: r.currency,
-        tag: r.tag,
-        source: r.source,
-        note: r.note,
-      }))
-    );
-    await bulkEnsureTags(userId, toInsert.map((r) => r.tag), "income");
-  }
-  revalidatePath("/cashflow");
-  revalidatePath("/");
-  return { inserted: toInsert.length, skipped, errors };
-}
-
-export async function importExpensesCsv(csvText: string): Promise<ImportResult> {
-  const userId = await requireUser();
-  const { rows, errors } = parseTransactionCsv(csvText);
-  const existing = await existingTransactionKeys(expenses, userId);
-  const seen = new Set<string>();
-  const toInsert: typeof rows = [];
-  let skipped = 0;
-  for (const r of rows) {
-    const k = transactionKey(r.date, r.amount, r.tag, r.source);
-    if (existing.has(k) || seen.has(k)) {
-      skipped++;
-      continue;
-    }
-    seen.add(k);
-    toInsert.push(r);
-  }
-  if (toInsert.length > 0) {
-    await db.insert(expenses).values(
-      toInsert.map((r) => ({
-        userId,
-        date: r.date,
-        amount: r.amount.toString(),
-        currency: r.currency,
-        tag: r.tag,
-        source: r.source,
-        note: r.note,
-      }))
-    );
-    await bulkEnsureTags(userId, toInsert.map((r) => r.tag), "expense");
-  }
-  revalidatePath("/cashflow");
   revalidatePath("/");
   return { inserted: toInsert.length, skipped, errors };
 }
