@@ -31,8 +31,9 @@ export const viewport: Viewport = {
   themeColor: "#0a0a0a",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  // Zoom stays enabled on purpose. Installed to the home screen there is no browser
+  // chrome to pinch out of a control you cannot hit, and every field here is >=16px,
+  // so iOS has no reason to auto-zoom on focus either.
   viewportFit: "cover",
 };
 

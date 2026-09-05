@@ -96,7 +96,6 @@ export function TransactionForm({
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          style={{ fontSize: "16px" }}
           required
         />
       </div>
@@ -127,7 +126,6 @@ export function TransactionForm({
           id="source"
           value={source}
           onChange={(e) => setSource(e.target.value)}
-          style={{ fontSize: "16px" }}
           placeholder="optional"
         />
       </div>
@@ -139,17 +137,25 @@ export function TransactionForm({
           rows={2}
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          style={{ fontSize: "16px" }}
         />
       </div>
 
       <div className="flex gap-2 pt-2">
         {onCancel ? (
-          <Button type="button" variant="outline" className="flex-1" onClick={onCancel}>
+          <Button
+            type="button"
+            variant="outline"
+            className="h-12 flex-1 text-base md:h-9 md:text-sm"
+            onClick={onCancel}
+          >
             Cancel
           </Button>
         ) : null}
-        <Button type="submit" className="flex-1" disabled={pending}>
+        <Button
+          type="submit"
+          className="h-12 flex-1 text-base md:h-9 md:text-sm"
+          disabled={pending}
+        >
           {pending ? "Saving…" : "Save"}
         </Button>
       </div>

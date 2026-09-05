@@ -40,7 +40,9 @@ app/
   sign-in/[[...sign-in]]/page.tsx
   sign-up/[[...sign-up]]/page.tsx
 components/
-  ui/                         # shadcn primitives (don't edit by hand)
+  ui/                         # shadcn primitives — regenerate, don't restyle by hand.
+                              # Exception: the mobile-first touch sizing (`h-11 md:h-8`)
+                              # and the portal `container` are hand-carried, see Mobile UX.
   charts/                     # Recharts wrappers
   forms/                      # Form components (each in BottomSheet)
   layout/                     # BottomNav, AppShell, KeyboardAware
@@ -92,10 +94,28 @@ L'utente può creare tag custom on-the-fly da qualsiasi combobox di tag.
 1. Form via `BottomSheet` wrapper — Drawer su mobile, Dialog centrato su desktop (breakpoint 768px).
 2. **Tastiera iOS: non gestirla a mano.** Vaul riposiziona già il drawer da sé (`repositionInputs`, default true) e legge il `transform` del drawer per capire lo swipe: scrivere un nostro `transform` sopra spostava il foglio fuori posizione e falsava il drag. (Un hook `useVisualViewport` faceva esattamente questo — rimosso 2026-08-09.)
 3. **Popup dentro il Drawer: `container` obbligatorio.** Vaul è un dialog modale Radix, quindi mentre il drawer è aperto il `<body>` ha `pointer-events: none`. Un Popover/Select portalato su `<body>` risulta visibile ma non toccabile, e il tap attraversa fino all'overlay che chiude il drawer. `BottomSheet` espone il nodo del drawer via `PopupContainerProvider` e `ui/popover.tsx` + `ui/select.tsx` lo leggono con `usePopupContainer()`. Ogni nuovo primitive con portal deve fare lo stesso, più `data-vaul-no-drag` sul popup perché lo scroll interno non trascini il foglio.
-4. Bottom nav con `padding-bottom: env(safe-area-inset-bottom)`.
-5. Grafici: max 7-8 data points visibili, paginazione per anno/quarter.
-6. Nessuno scroll orizzontale.
-7. PWA: `manifest.json`, `apple-touch-icon`, theme-color.
+4. **Il pavimento 44pt/16px vive nei primitives, non nelle pagine.** `input`, `textarea`,
+   `select-trigger`, `select-item`, `command-input`, `command-item` e `button` (size
+   `default`/`icon`) sono mobile-first: misura touch alla base, compatta da `md:`. Più un
+   blocco `@media (pointer: coarse)` in fondo a `globals.css`, **fuori da ogni `@layer`**
+   così batte le utility di Tailwind: forza 16px sui campi e `touch-action: manipulation`
+   sui bersagli. Non rimettere `style={{ fontSize: "16px" }}` sui singoli campi — è
+   ridondante e nasconde il difetto nel primitive.
+5. **Lo zoom resta abilitato** (`viewport` senza `maximumScale`/`userScalable`). In
+   standalone non c'è chrome del browser da cui pizzicare per raggiungere un controllo
+   troppo piccolo, e con i campi a 16px iOS non ha motivo di zoomare al focus.
+6. **Il corpo del bottom sheet è lo scroller**, non il foglio. Con la tastiera aperta il
+   foglio è basso: un campo sotto la piega si raggiunge scrollando: trascinare il foglio
+   vaul lo legge come dismiss. `BottomSheet` mette `flex-1 overflow-y-auto min-h-0` sul
+   corpo e tiene header e footer fermi; il `DrawerContent` usa `max-h-[85dvh]` (non `vh`)
+   e `padding-bottom: env(safe-area-inset-bottom)` per stare sopra la home indicator.
+7. **Select dentro un sheet: `alignItemWithTrigger` va a false.** Il default di Base UI
+   stende la lista sopra il trigger per allineare l'item selezionato; in un foglio la
+   schiaccia contro i bordi. `ui/select.tsx` lo decide da sé: `alignItemWithTrigger ?? !container`.
+8. Bottom nav con `padding-bottom: env(safe-area-inset-bottom)`.
+9. Grafici: max 7-8 data points visibili, paginazione per anno/quarter.
+10. Nessuno scroll orizzontale.
+11. PWA: `manifest.json`, `apple-touch-icon`, theme-color.
 
 ## Comandi utili
 

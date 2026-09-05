@@ -19,7 +19,7 @@ export function CurrencySelect({
 }) {
   return (
     <Select value={value} onValueChange={(v) => onChange(v ?? "EUR")}>
-      <SelectTrigger className="w-[100px]">
+      <SelectTrigger className="w-[104px] shrink-0 md:w-[100px]">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

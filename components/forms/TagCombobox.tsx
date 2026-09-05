@@ -43,7 +43,7 @@ export function TagCombobox({
       <PopoverTrigger
         className={cn(
           buttonVariants({ variant: "outline", size: "default" }),
-          "h-10 w-full justify-between font-normal"
+          "h-11 w-full justify-between text-base font-normal md:h-10 md:text-sm"
         )}
         role="combobox"
         aria-expanded={open}

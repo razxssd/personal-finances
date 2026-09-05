@@ -128,3 +128,25 @@
     @apply font-sans;
   }
 }
+
+/* Touch devices. Deliberately outside every @layer so it beats the utilities:
+   this is the 16px/44pt floor the project's mobile rules ask for, applied to the
+   primitives themselves so a component nobody remembered to size still obeys it. */
+@media (pointer: coarse) {
+  [data-slot="input"],
+  [data-slot="textarea"],
+  [data-slot="command-input"] {
+    font-size: 16px; /* below 16px iOS zooms the page on focus and never zooms back */
+  }
+
+  [data-slot="button"],
+  [data-slot="select-trigger"],
+  [data-slot="select-item"],
+  [data-slot="command-item"],
+  [data-slot="dropdown-menu-item"],
+  [data-slot="tabs-trigger"],
+  [role="combobox"],
+  a {
+    touch-action: manipulation; /* drops the 300ms double-tap-to-zoom wait */
+  }
+}

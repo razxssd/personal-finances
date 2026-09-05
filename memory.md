@@ -162,6 +162,45 @@ Segnalazione: aprendo il form "Add investment" da iPhone, i tap sui campi non fa
 
 Note: il percorso desktop (Base UI `Dialog`) non era toccato e resta invariato — `body.pointer-events` lì è vuoto. Aggiunto `data-vaul-no-drag` sui popup così lo scroll interno non trascina il foglio. Con il popup dentro il drawer, il tasto Esc chiude anche il drawer (nessuna tastiera fisica su iPhone, ininfluente in pratica).
 
+## Form touch su iOS, parte 2 — la PWA (2026-08-21)
+
+Segnalazione: dal browser i form "funzionano male ma almeno le dropdown si aprono"; dalla
+PWA (aggiungi a Home) i campi della liquidity non si riescono a selezionare. Il fix del
+2026-08-09 aveva risolto l'interattività (portal dentro il drawer), non l'**ergonomia**:
+restava tutto grande la metà di un bersaglio touch.
+
+Cause, in ordine di peso:
+
+1. **I controlli erano da 32px, non 44.** Il preset shadcn usato (base-nova) è denso da
+   desktop: `input` `h-8`, `select-trigger` `h-8`, `button` default `h-8`, righe di
+   select `py-1` (~28px), righe del combobox `py-1.5` (~30px), campo di ricerca `h-8!`.
+   Il CLAUDE.md chiedeva ≥44pt da sempre: nessun primitive lo rispettava.
+2. **Lo zoom era disabilitato** (`maximumScale: 1`, `userScalable: false`). Safari come
+   browser ignora quel meta (accessibilità), una PWA standalone no: nel browser Eduard
+   pizzicava per centrare un bersaglio da 32px, installata non poteva più. È esattamente
+   la differenza che ha segnalato. Rimosso: con tutti i campi a 16px non serviva.
+3. **Il foglio non scrollava.** `DrawerContent` era `h-auto` + `max-h-[80vh]` senza
+   scroller interno: con la tastiera aperta i campi sotto la piega erano irraggiungibili
+   (e trascinare il foglio = dismiss). Ora il corpo è `flex-1 overflow-y-auto min-h-0`,
+   il foglio `max-h-[85dvh]`.
+4. **Niente safe-area in fondo al foglio.** In standalone il foglio arriva al bordo
+   fisico: gli ultimi ~34px sono la zona della home indicator, dove il sistema si prende
+   lo swipe. Il bottone Save cadeva lì. Aggiunto `env(safe-area-inset-bottom)`.
+5. **Select dentro il foglio**: `alignItemWithTrigger` (default true) stendeva la lista
+   sopra il trigger; nel foglio finiva schiacciata. Dentro un drawer ora è false.
+
+Verificato in WebKit con touch a 428×926 (iPhone 12 Pro Max) su una route probe temporanea
+sotto `/sign-in-dev-forms` (pubblica per il matcher del middleware, poi cancellata):
+tutti i controlli ≥44px e ≥16px, ognuno topmost al proprio centro, popup del select
+`pointer-events: auto` e interamente in viewport, scelta valuta e tag funzionanti,
+e con viewport schiacciato a 428×560 (tastiera simulata) il corpo scrolla e Save resta
+raggiungibile. Desktop ricontrollato a 1280: tutto torna a 32/36/40px, Dialog centrato,
+portal su body, `alignItemWithTrigger` true. Script: `Lupy/tmp/pf-touch/`.
+
+Nota: `size="sm"`/`"xs"`/`"icon-sm"`/`"icon-xs"` dei bottoni sono lasciati compatti di
+proposito (chip in liste dense). Se un giorno un bersaglio `sm` sta in un form, va
+promosso a `default`, non rimpicciolito il pavimento.
+
 ## TODO / decisioni rimaste aperte
 
 - [ ] Provisioning Neon e Clerk su Vercel Marketplace (richiede browser, l'utente lo fa).

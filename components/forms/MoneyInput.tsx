@@ -13,8 +13,9 @@ export const MoneyInput = forwardRef<HTMLInputElement, Props>(function MoneyInpu
       inputMode="decimal"
       pattern="[0-9]*[.,]?[0-9]*"
       autoComplete="off"
+      autoCorrect="off"
+      spellCheck={false}
       placeholder="0,00"
-      style={{ fontSize: "16px" }}
       {...props}
     />
   );

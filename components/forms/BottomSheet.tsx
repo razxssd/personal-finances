@@ -89,12 +89,19 @@ function MobileDrawer({
       {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
       <DrawerContent ref={setContentEl} className="px-4">
         <PopupContainerProvider container={contentEl}>
-          <DrawerHeader className="px-0 text-left">
+          <DrawerHeader className="shrink-0 px-0 text-left">
             <DrawerTitle>{title}</DrawerTitle>
             {description ? <DrawerDescription>{description}</DrawerDescription> : null}
           </DrawerHeader>
-          <div className="space-y-4 pb-2">{children}</div>
-          {footer ? <DrawerFooter className="px-0">{footer}</DrawerFooter> : null}
+          {/* The body is the scroller, not the sheet. With the keyboard up the sheet
+              is short, and a field below the fold has to be reachable by scrolling
+              rather than by dragging the sheet (which vaul reads as a dismiss). */}
+          <div className="-mx-4 min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-2">
+            <div className="space-y-4">{children}</div>
+          </div>
+          {footer ? (
+            <DrawerFooter className="shrink-0 px-0">{footer}</DrawerFooter>
+          ) : null}
         </PopupContainerProvider>
       </DrawerContent>
     </Drawer>

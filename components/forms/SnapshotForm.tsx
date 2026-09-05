@@ -92,7 +92,6 @@ export function SnapshotForm({
           type="month"
           value={monthYear}
           onChange={(e) => setMonthYear(e.target.value)}
-          style={{ fontSize: "16px" }}
           required
         />
       </div>
@@ -122,18 +121,26 @@ export function SnapshotForm({
           rows={2}
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          style={{ fontSize: "16px" }}
           placeholder="e.g. VWCE on Directa"
         />
       </div>
 
       <div className="flex gap-2 pt-2">
         {onCancel ? (
-          <Button type="button" variant="outline" className="flex-1" onClick={onCancel}>
+          <Button
+            type="button"
+            variant="outline"
+            className="h-12 flex-1 text-base md:h-9 md:text-sm"
+            onClick={onCancel}
+          >
             Cancel
           </Button>
         ) : null}
-        <Button type="submit" className="flex-1" disabled={pending}>
+        <Button
+          type="submit"
+          className="h-12 flex-1 text-base md:h-9 md:text-sm"
+          disabled={pending}
+        >
           {pending ? "Saving…" : "Save"}
         </Button>
       </div>
