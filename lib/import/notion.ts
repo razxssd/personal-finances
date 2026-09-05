@@ -1,6 +1,6 @@
 import Papa from "papaparse";
 
-export type NotionExpenseRow = {
+export type NotionTransactionRow = {
   source: string;
   amount: number;
   category: string;
@@ -54,8 +54,13 @@ function parseAmount(raw: string): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
-export function parseNotionExpensesCsv(csvText: string): {
-  rows: NotionExpenseRow[];
+/**
+ * Parses a Notion database export. The Expenses and Income databases share the
+ * same column shape (Source, Amount, Category, Date, Month), so one parser
+ * serves both — the caller decides which table the rows land in.
+ */
+export function parseNotionTransactionsCsv(csvText: string): {
+  rows: NotionTransactionRow[];
   errors: { line: number; message: string }[];
 } {
   const errors: { line: number; message: string }[] = [];
@@ -63,7 +68,7 @@ export function parseNotionExpensesCsv(csvText: string): {
     header: true,
     skipEmptyLines: true,
   });
-  const rows: NotionExpenseRow[] = [];
+  const rows: NotionTransactionRow[] = [];
   parsed.data.forEach((row, idx) => {
     const lineNo = idx + 2; // header is line 1
     const source = (row.Source ?? "").trim();

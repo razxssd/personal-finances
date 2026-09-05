@@ -43,6 +43,9 @@ Le righe Apr/May 2026 hanno `Date` vuoto. Il parser usa la colonna `Month` ("Apr
 ### URL Notion nel campo Month
 Il `Month` ha sempre suffisso ` (https://www.notion.so/...)`. Il parser lo strippa.
 
+### Un solo parser Notion per Expenses e Income
+I due database Notion esportano le stesse colonne (`Source,Amount,Category,Date,Month`, piu` un `Year` che si ignora), quindi `parseNotionTransactionsCsv` serve entrambi: cambia solo la tabella di destinazione (`expenses` vs `incomes`) e il `kind` dei tag creati. Le categorie income di Eduard sono Salary, Extra, Parents, DEBT, Investments, State, Freelance — restano as-is accanto ai preset italiani (Stipendio, Rimborsi), coerente con la regola "import faithful".
+
 ## Tema
 
 - **`next-themes`** gestisce il tema: `defaultTheme="dark"`, `enableSystem`.

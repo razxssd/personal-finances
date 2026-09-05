@@ -5,7 +5,7 @@ import { db } from "@/lib/db";
 import { investments, liquidity, incomes, expenses, tags, type TagKind } from "@/lib/db/schema";
 import { requireUser } from "@/lib/db/queries";
 import { parseSnapshotCsv, parseTransactionCsv } from "./csv";
-import { parseNotionExpensesCsv } from "./notion";
+import { parseNotionTransactionsCsv } from "./notion";
 import { and, eq } from "drizzle-orm";
 
 export type ImportResult = {
@@ -210,7 +210,7 @@ export async function importExpensesCsv(csvText: string): Promise<ImportResult> 
 
 export async function importNotionExpensesCsv(csvText: string): Promise<ImportResult> {
   const userId = await requireUser();
-  const { rows, errors } = parseNotionExpensesCsv(csvText);
+  const { rows, errors } = parseNotionTransactionsCsv(csvText);
   const existing = await existingTransactionKeys(expenses, userId);
   const seen = new Set<string>();
   const toInsert: typeof rows = [];
@@ -237,6 +237,41 @@ export async function importNotionExpensesCsv(csvText: string): Promise<ImportRe
       }))
     );
     await bulkEnsureTags(userId, toInsert.map((r) => r.category), "expense");
+  }
+  revalidatePath("/cashflow");
+  revalidatePath("/");
+  return { inserted: toInsert.length, skipped, errors };
+}
+
+export async function importNotionIncomesCsv(csvText: string): Promise<ImportResult> {
+  const userId = await requireUser();
+  const { rows, errors } = parseNotionTransactionsCsv(csvText);
+  const existing = await existingTransactionKeys(incomes, userId);
+  const seen = new Set<string>();
+  const toInsert: typeof rows = [];
+  let skipped = 0;
+  for (const r of rows) {
+    const k = transactionKey(r.date, r.amount, r.category, r.source);
+    if (existing.has(k) || seen.has(k)) {
+      skipped++;
+      continue;
+    }
+    seen.add(k);
+    toInsert.push(r);
+  }
+  if (toInsert.length > 0) {
+    await db.insert(incomes).values(
+      toInsert.map((r) => ({
+        userId,
+        date: r.date,
+        amount: r.amount.toString(),
+        currency: r.currency,
+        tag: r.category,
+        source: r.source,
+        note: null,
+      }))
+    );
+    await bulkEnsureTags(userId, toInsert.map((r) => r.category), "income");
   }
   revalidatePath("/cashflow");
   revalidatePath("/");

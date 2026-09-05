@@ -52,7 +52,7 @@ lib/
   schemas.ts                  # Zod schemas (forms + import)
   import/
     csv.ts                    # Generic CSV parsers
-    notion.ts                 # Notion expenses parser (see memory.md for rules)
+    notion.ts                 # Notion expenses + income parser (see memory.md for rules)
   fx.ts                       # Currency conversion (exchangerate.host + CoinGecko)
   format.ts                   # EUR + IT date formatters
   tags.ts                     # Preset tags per kind

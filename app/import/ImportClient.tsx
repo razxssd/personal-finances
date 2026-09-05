@@ -12,6 +12,7 @@ import {
   importIncomesCsv,
   importExpensesCsv,
   importNotionExpensesCsv,
+  importNotionIncomesCsv,
   exportAllAsJson,
 } from "@/lib/import/actions";
 import {
@@ -20,6 +21,7 @@ import {
   INCOME_PROMPT,
   EXPENSES_PROMPT,
   NOTION_EXPENSES_PROMPT,
+  NOTION_INCOME_PROMPT,
 } from "@/lib/import/prompts";
 
 type ImportFn = (csv: string) => Promise<{
@@ -223,6 +225,15 @@ export function ImportClient() {
           templateUrl="/templates/notion-expenses.csv"
           prompt={NOTION_EXPENSES_PROMPT}
           importFn={importNotionExpensesCsv}
+          acceptLabel="Upload Notion CSV"
+        />
+
+        <ImportCard
+          title="Notion — Income"
+          description="Upload the Notion Income database export directly (columns: Source, Amount, Category, Date, Month). The $ prefix is stripped, amounts are stored as EUR."
+          templateUrl="/templates/notion-income.csv"
+          prompt={NOTION_INCOME_PROMPT}
+          importFn={importNotionIncomesCsv}
           acceptLabel="Upload Notion CSV"
         />
 
